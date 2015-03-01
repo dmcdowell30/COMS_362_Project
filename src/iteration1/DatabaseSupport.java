@@ -1,5 +1,12 @@
 package iteration1;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 
@@ -10,8 +17,9 @@ public class DatabaseSupport {
 	private String query(String command){
 		String result = "";
 		
+		//TODO send query. Get Back result.
 		
-		
+		System.out.println(result);
 		return result;
 	}
 	
@@ -23,6 +31,11 @@ public class DatabaseSupport {
 	
 	boolean putLibrarian(Librarian l){
 		boolean success = false;
+		//TODO
+		String query = "INSERT INTO 'arlenb_coms362db'.'librarians' ('id', 'username', 'password') "+
+		"VALUES (NULL, '"+l.getUsername()+"', '"+l.getPassword()+"');";
+		
+		query(query);
 		
 		return success;
 	}
@@ -30,12 +43,17 @@ public class DatabaseSupport {
 	boolean removeLibrarian(String username){
 		boolean success = false;
 		
+		String query = "INSERT INTO 'arlenb_coms362db'.'librarians' ('id', 'username', 'password') "+
+				"VALUES (NULL, '"+l.getUsername()+"', '"+l.getPassword()+"');";
+				
+		query(query);
+		
 		return success;
 	}
 	
 	boolean putCustomer(Customer c){
 		boolean success = false;
-		
+		//TODO
 		return success;
 	}
 	
@@ -64,13 +82,13 @@ public class DatabaseSupport {
 		return success;
 	}
 	
-	boolean putInventoryItem(Inventory i){
+	boolean putInventoryItem(Item i){
 		boolean success = false;
 		
 		return success;
 	}
 	
-	boolean removeInventoryItem(String code){
+	boolean removeInventoryItem(String code, int quantity){
 		boolean success = false;
 		
 		return success;
