@@ -62,7 +62,7 @@ public class LibraryController {
 		return cust;
 	}
 	
-	public boolean addInventoryItem(String name, String type, String code, int quantity))
+	public boolean addInventoryItem(String name, String type, String code, int quantity)
 	{
 		if(lib.addInventoryItem(name, type, code, quantity))
 		{

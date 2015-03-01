@@ -97,8 +97,9 @@ public class Main {
 				{
 					System.out.print("Enter customer id: ");
 					String id = input.nextLine();
+					int ID = Integer.parseInt(id);
 					
-					libctrl.deleteCustomer(id);
+					libctrl.deleteCustomer(ID);
 				}
 				else if(in.equals("3"))
 				{
@@ -110,7 +111,7 @@ public class Main {
 					int quantity = Integer.parseInt(quan);
 					
 					
-					libctrl.addInventoryItem(code, quantity);
+					libctrl.deleteInventoryItem(code, quantity);
 				}
 				else
 				{
