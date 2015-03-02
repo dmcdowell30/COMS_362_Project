@@ -1,14 +1,12 @@
 package iteration1;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 
@@ -16,43 +14,39 @@ import java.util.ArrayList;
 public class DatabaseSupport {
 	
 	
-	private String query(String command){
+	public String query(String command){
 		String result = "";
+		String charset = "UTF-8";
+		String url = "http://databasesupport.arlenburroughs.com/db_query.php";
+		String query = "";
 		
-		//TODO send query. Get Back result.
-		HttpClient httpclient = HttpClients.createDefault();
-		HttpPost httppost = new HttpPost("http://databasesupport.arlenburroughs.com/db_query.php");
-
-		// Request parameters and other properties.
-		List<NameValuePair> params = new ArrayList<NameValuePair>(2);
-		params.add(new BasicNameValuePair("query", command));
-		httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-
-		//Execute and get the response.
-		HttpResponse response = httpclient.execute(httppost);
-		HttpEntity entity = response.getEntity();
-
-		if (entity != null) {
-		    InputStream instream = entity.getContent();
-		  //convert response to string
-			try{
-			        BufferedReader reader = new BufferedReader(new InputStreamReader(instream,"iso-8859-1"),8);
-			        StringBuilder sb = new StringBuilder();
-			        String line = null;
-			        while ((line = reader.readLine()) != null) {
-			                sb.append(line + "\n");
-			        }
-			        instream.close();
-			        result=sb.toString();
-			        
-			}catch(Exception e){
-			        return "CF";
-			}
+		URLConnection connection;
+		String contentType = null;
+		InputStream response = null;
+		try {
+			query = "?query="+URLEncoder.encode(command, "UTF-8");
+			connection = new URL(url+query).openConnection();
+			connection.setRequestProperty("Accept-Charset", charset);
+			response = connection.getInputStream();
 			
-			return result;
+			contentType = connection.getHeaderField("Content-Type");
+		} catch (IOException e1) {
+			System.out.println("Error1");
+			e1.printStackTrace();
 		}
-		
-		System.out.println(result);
+
+		if (charset != null) {
+		    try (BufferedReader reader = new BufferedReader(new InputStreamReader(response, charset))) {
+		        for (String line; (line = reader.readLine()) != null;) {
+		            result = result+line;
+		        }
+		    } catch (IOException e) {
+		    	System.out.println("Error2");
+				e.printStackTrace();
+			}
+		}
+
+		System.out.println("From DB: "+result);
 		return result;
 	}
 	
