@@ -162,10 +162,11 @@ public class Main {
 			{
 				System.out.println("Please enter correct input.");
 			}
-			System.out.println("Continue? (y/n)");
+			System.out.print("Continue? (y/n) ");
 			in = input.nextLine();
 			if(!in.toLowerCase().contains("y"))break;
 		}
+		System.out.println("Have a good day! Let me know if you need some lip therapy.");
 	}
 
 }

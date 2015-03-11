@@ -66,7 +66,9 @@ public class DatabaseSupport {
 		String query = "SELECT * FROM `librarians` WHERE username = '"+l.getUsername()+"'";
 		String result = query(query);
 		
-		if(!result.equals(""))return false;//result wasn't empty. A librarian exists.
+		if(!result.equals("")){
+			return false;//result wasn't empty. A librarian exists, or db error.
+		}
 		
 		
 		query = "INSERT INTO `librarians` (`id`, `username`, `password`) "
