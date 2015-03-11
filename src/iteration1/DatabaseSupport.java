@@ -196,7 +196,6 @@ public class DatabaseSupport {
 	
 	boolean putInventoryItem(Item i){
 		
-		// determine if a current librarian exists with that username
 		String query = "SELECT * FROM `items` WHERE code = '"+ i.getCode() + "'";
 		String result = query(query);
 
@@ -213,9 +212,19 @@ public class DatabaseSupport {
 	}
 	
 	boolean removeInventoryItem(String code, int quantity){
-		//TODO
-		boolean success = false;
-		
-		return success;
+		// determine if the username exists.
+		String query = "SELECT * FROM `items` WHERE code = '"+code+"'";
+		String result = query(query);
+
+		if (result.equals(""))
+			return false;// result was empty. no item exists for code
+
+		query = "UPDATE `items` SET `quantity` = '"+quantity+"' WHERE `code` = "+code;
+		result = query(query);
+
+		if (result.equals(""))
+			return true;// successful delete query returns exactly nothing.
+
+		return false;
 	}
 }
