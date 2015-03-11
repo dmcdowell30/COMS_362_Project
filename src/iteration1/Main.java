@@ -1,5 +1,6 @@
 package iteration1;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -139,7 +140,10 @@ public class Main {
 			}
 			else if(in.equals("4")) // view customer list
 			{
-				libctrl.viewCustomerList();
+				ArrayList<Customer> custList = libctrl.viewCustomerList();
+				for(Customer customer: custList){
+					System.out.println("Customer id: "+customer.getId()+", name: "+customer.getName());
+				}
 			}
 			else if(in.equals("5")) // view inventory
 			{

@@ -53,13 +53,7 @@ public class LibraryController {
 	
 	public Customer viewCustomer(int id)
 	{
-		Customer cust = lib.viewCustomer(id);
-		
-		System.out.println("Customer: " + cust);
-//		System.out.println("Name: " + cust.getName());
-//		System.out.println("ID: " + cust.getID);
-		
-		return cust;
+		return lib.viewCustomer(id);
 	}
 	
 	public boolean addInventoryItem(String name, String type, String code, int quantity)
@@ -84,11 +78,7 @@ public class LibraryController {
 	
 	public ArrayList<Customer> viewCustomerList()
 	{
-		ArrayList<Customer> custList = lib.viewCustomerList();
-		
-		System.out.println("Customer List: " + custList);
-		
-		return custList;
+		return lib.viewCustomerList();
 	}
 	
 	public Inventory viewInventory()

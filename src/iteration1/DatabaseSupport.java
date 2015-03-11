@@ -9,6 +9,10 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 
 public class DatabaseSupport {
@@ -120,17 +124,43 @@ public class DatabaseSupport {
 	}
 	
 	Customer getCustomer(int id){
-		//TODO
 		Customer customer = null;
 		
 		String query = "SELECT * FROM `customers` WHERE id = "+ id;
 		String result = query(query);
 		
 		if (result.equals(""))return customer;// result was empty. return null object.
+		try {
+			JSONArray jArr = new JSONArray(result);
+			JSONObject jobj = jArr.getJSONObject(0);
+			customer = new Customer(jobj.getString("name"));
+			customer.setId(Integer.parseInt(jobj.getString("id")));
+		} catch (JSONException e) {e.printStackTrace();}
 		
 		
+		return customer;
+	}
+	
+	ArrayList<Customer> getCustomerList(){
 		
-		return null;
+		ArrayList<Customer> customerList = new ArrayList<Customer>();
+		
+		String query = "SELECT * FROM `customers`";
+		String result = query(query);
+		
+		if (result.equals(""))return customerList;// result was empty. return null object.
+		try {
+			JSONArray jArr = new JSONArray(result);
+			Customer aCustomer;
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				aCustomer = new Customer(jobj.getString("name"));
+				aCustomer.setId(Integer.parseInt(jobj.getString("id")));
+				customerList.add(aCustomer);
+			}
+		} catch (JSONException e) {e.printStackTrace();}
+		
+		return customerList;
 	}
 	
 	Inventory RequestInventory(){
@@ -144,23 +174,15 @@ public class DatabaseSupport {
 		return inventory;
 	}
 	
-	ArrayList<Customer> getCustomerList(){
-		
-		ArrayList<Customer> customerList = new ArrayList<Customer>();
-		
-		String query = "SELECT * FROM 'arlenb_coms362db'.'customers';";
-		String response = query(query);
-		
-		return customerList;
-	}
-	
 	boolean putInventoryItem(Item i){
+		//TODO
 		boolean success = false;
 		
 		return success;
 	}
 	
 	boolean removeInventoryItem(String code, int quantity){
+		//TODO
 		boolean success = false;
 		
 		return success;
