@@ -15,9 +15,10 @@ public class DatabaseSupport {
 	
 	
 	public String query(String command){
+		System.out.println("Query: "+command);
 		String result = "";
 		String charset = "UTF-8";
-		String url = "http://databasesupport.arlenburroughs.com/db_query.php";
+		String url = "http://databasesupport.arlenburroughs.com/db_query2.php";
 		String query = "";
 		
 		URLConnection connection;
@@ -26,6 +27,7 @@ public class DatabaseSupport {
 		try {
 			query = "?query="+URLEncoder.encode(command, "UTF-8");
 			connection = new URL(url+query).openConnection();
+			//System.out.println(url+query);
 			connection.setRequestProperty("Accept-Charset", charset);
 			response = connection.getInputStream();
 			
@@ -52,61 +54,94 @@ public class DatabaseSupport {
 	
 	
 	/////////////////////////////////////
-	////// Below are from Class Diagram
-	//////////////////////////
-	
+	////// Below are from Class Diagram //TODO
+	/////////////////////////////////////
 	
 	boolean putLibrarian(Librarian l){
-		boolean success = false;
+		System.out.println("Put Librarian: user:"+l.getUsername()+", pass:"+l.getPass());
 		
-		String query = "INSERT INTO 'arlenb_coms362db'.'librarians' ('id', 'username', 'password') "+
-		"VALUES (NULL, '"+l.getUsername()+"', '"+"librarian password"+"');";
+		// determine if a current librarian exists with that username
+		String query = "SELECT * FROM `librarians` WHERE username = '"+l.getUsername()+"'";
+		String result = query(query);
 		
-		query(query);
+		if(!result.equals(""))return false;//result wasn't empty. A librarian exists.
 		
-		return success;
+		
+		query = "INSERT INTO `arlenb_coms362db`.`librarians` (`id`, `username`, `password`) "
+				+ "VALUES (NULL, '"+l.getUsername()+"', '"+l.getPass()+"');";
+		result = query(query);
+		
+		if(result.equals(""))return true;//successful insert query returns exactly nothing.
+		
+		return true;
 	}
 	
 	boolean removeLibrarian(String username){
-		boolean success = false;
 		
-		String query = "DELETE FROM 'arlenb_coms362db'.'librarians' WHERE 'username' = '"+username+"';";
+		// determine if the username exists.
+		String query = "SELECT * FROM `librarians` WHERE username = '"+username+"'";
 		String result = query(query);
+				
+		if(result.equals(""))return false;//result was empty. no librarian exists for username
 		
-		if(result.length()>0)success = true;
+		query = "DELETE FROM `arlenb_coms362db`.`librarians` WHERE `librarians`.`username` = '"+username+"'";
+		result = query(query);
 		
-		return success;
+		if(result.equals(""))return true;//successful delete query returns exactly nothing.
+		
+		return false;
 	}
 	
 	boolean putCustomer(Customer c){
-		boolean success = false;
+		System.out.println("Put Customer: user:"+c.getName());
 		
-		String query = "INSERT INTO 'arlenb_coms362db'.'customers' ('id', 'username', 'password') "+
-				"VALUES (NULL, '"+c.getName()+"', '"+"customer password"+"');";
-				
-		String response = query(query);
+		String query = "INSERT INTO `customers` (`id`, `name`) "
+				+ "VALUES (NULL, '"+c.getName()+"')";
+		String result = query(query);
 		
-		return success;
+		if(result.equals(""))return true;//successful insert query returns exactly nothing.
+		
+		return false;
+	}
+	
+	boolean removeCustomer(int id){
+		// determine if the username exists.
+		String query = "SELECT * FROM `customers` WHERE id = "+ id;
+		String result = query(query);
+
+		if (result.equals(""))return false;// result was empty. no librarian exists for username
+
+		query = "DELETE FROM `customers` WHERE `id` = "+id;
+		result = query(query);
+
+		if (result.equals(""))return true;// successful delete query returns exactly nothing.
+
+		return false;
+	}
+	
+	Customer getCustomer(int id){
+		//TODO
+		Customer customer = null;
+		
+		String query = "SELECT * FROM `customers` WHERE id = "+ id;
+		String result = query(query);
+		
+		if (result.equals(""))return customer;// result was empty. return null object.
+		
+		
+		
+		return null;
 	}
 	
 	Inventory RequestInventory(){
+		//TODO
 		Inventory inventory = new Inventory();
 		
-		String query = "SELECT * FROM 'arlenb_coms362db'.'inventory';";
+		String query = "SELECT * FROM `items`;";
 				
 		String response = query(query);
 		
 		return inventory;
-	}
-	
-	Customer getCustomer(int id){
-		Customer customer;
-		
-		String query = "SELECT * FROM 'arlenb_coms362db'.'customers'"+
-		"WHERE id = '"+id+"'";
-		String response = query(query);
-		
-		return null;
 	}
 	
 	ArrayList<Customer> getCustomerList(){
@@ -117,12 +152,6 @@ public class DatabaseSupport {
 		String response = query(query);
 		
 		return customerList;
-	}
-	
-	boolean removeCustomer(int id){
-		boolean success = false;
-		
-		return success;
 	}
 	
 	boolean putInventoryItem(Item i){
