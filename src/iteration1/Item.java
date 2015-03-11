@@ -2,13 +2,17 @@ package iteration1;
 
 public interface Item {
 
+	int BOOK = 0;
+	int MOVIE = 1;
+	int MUSIC = 2;
 	
 	public String getCode();
 	public String getName();
-	public String getType();
+	public int getType();
+	public String getTypeString();
 	public int getQuantity();
-	public String setCode();
-	public String setName();
-	public String setType();
-	public int setQuantity();
+	public void setCode();
+	public void setName();
+	public void setType();
+	public void setQuantity();
 }

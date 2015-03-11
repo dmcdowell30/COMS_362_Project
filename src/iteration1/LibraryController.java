@@ -56,9 +56,9 @@ public class LibraryController {
 		return lib.viewCustomer(id);
 	}
 	
-	public boolean addInventoryItem(String name, String type, String code, int quantity)
+	public boolean addInventoryItem(int type, String name, String code, int quantity)
 	{
-		if(lib.addInventoryItem(name, type, code, quantity))
+		if(lib.addInventoryItem(type, name, code, quantity))
 		{
 			return true;
 		}
@@ -83,11 +83,7 @@ public class LibraryController {
 	
 	public Inventory viewInventory()
 	{
-		Inventory inv = lib.viewInventory();
-		
-		System.out.println("Inventory: " + inv);
-		
-		return inv;
+		return lib.viewInventory();
 	}
 	
 }

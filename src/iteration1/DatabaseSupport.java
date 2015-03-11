@@ -19,7 +19,7 @@ public class DatabaseSupport {
 	
 	
 	public String query(String command){
-		System.out.println("Query: "+command);
+		//System.out.println("Query: "+command);
 		String result = "";
 		String charset = "UTF-8";
 		String url = "http://databasesupport.arlenburroughs.com/db_query2.php";
@@ -31,7 +31,6 @@ public class DatabaseSupport {
 		try {
 			query = "?query="+URLEncoder.encode(command, "UTF-8");
 			connection = new URL(url+query).openConnection();
-			//System.out.println(url+query);
 			connection.setRequestProperty("Accept-Charset", charset);
 			response = connection.getInputStream();
 			
@@ -52,13 +51,13 @@ public class DatabaseSupport {
 			}
 		}
 
-		System.out.println("From DB: "+result);
+		//System.out.println("From DB: "+result);
 		return result;
 	}
 	
 	
 	/////////////////////////////////////
-	////// Below are from Class Diagram //TODO
+	////// Below are from Class Diagram 
 	/////////////////////////////////////
 	
 	boolean putLibrarian(Librarian l){
@@ -71,7 +70,7 @@ public class DatabaseSupport {
 		if(!result.equals(""))return false;//result wasn't empty. A librarian exists.
 		
 		
-		query = "INSERT INTO `arlenb_coms362db`.`librarians` (`id`, `username`, `password`) "
+		query = "INSERT INTO `librarians` (`id`, `username`, `password`) "
 				+ "VALUES (NULL, '"+l.getUsername()+"', '"+l.getPass()+"');";
 		result = query(query);
 		
@@ -164,21 +163,53 @@ public class DatabaseSupport {
 	}
 	
 	Inventory RequestInventory(){
-		//TODO
+		
 		Inventory inventory = new Inventory();
+		ArrayList<Item> itemList = new ArrayList<Item>();
 		
-		String query = "SELECT * FROM `items`;";
+		String query = "SELECT * FROM `items`";
+		String result = query(query);
+		
+		if (result.equals(""))return null;// result was empty. return null object.
+		
+		try {
+			JSONArray jArr = new JSONArray(result);
+			Item anItem = null;
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				String name = jobj.getString("name");
+				int type = jobj.getInt("type");
+				String code = jobj.getString("code");
+				int quantity = jobj.getInt("quantity");
 				
-		String response = query(query);
+				if(type==Item.BOOK)			anItem = new Book(name,code,quantity);
+				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity);
+				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity);
+				
+				itemList.add(anItem);
+			}
+		} catch (JSONException e) {return null;}
 		
+		inventory.setItemList(itemList);
 		return inventory;
 	}
 	
 	boolean putInventoryItem(Item i){
-		//TODO
-		boolean success = false;
 		
-		return success;
+		// determine if a current librarian exists with that username
+		String query = "SELECT * FROM `items` WHERE code = '"+ i.getCode() + "'";
+		String result = query(query);
+
+		if (!result.equals(""))
+			return false;// result wasn't empty. Item with same code already exists.
+		
+		query = "INSERT INTO `items` (`id`, `name`, `type`, `code`, `quantity`) "
+				+ "VALUES (NULL, '"+i.getName()+"', '"+i.getType()+"', '"+i.getCode()+"', '"+i.getQuantity()+"')";
+		result = query(query);
+		
+		if(result.equals(""))return true;
+		
+		return false;
 	}
 	
 	boolean removeInventoryItem(String code, int quantity){

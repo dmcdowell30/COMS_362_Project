@@ -54,20 +54,21 @@ public class Main {
 				}
 				else if(in.equals("3"))
 				{
-					System.out.print("Enter item code: ");
-					String code = input.nextLine();
-
+					System.out.print("Enter item type (0:Book, 1:Movie, 2:Music): ");
+					String itemType = input.nextLine();
+					int type = Integer.parseInt(itemType);
+					
 					System.out.print("Enter item name: ");
 					String name = input.nextLine();
-
-					System.out.print("Enter item type: ");
-					String type = input.nextLine();
+					
+					System.out.print("Enter item code: ");
+					String code = input.nextLine();
 
 					System.out.print("Enter item quantity: ");
 					String quan = input.nextLine();
 					int quantity = Integer.parseInt(quan);
 					
-					success = libctrl.addInventoryItem(code, name, type, quantity);
+					success = libctrl.addInventoryItem(type, name, code, quantity);
 				}
 				else
 				{
@@ -147,7 +148,11 @@ public class Main {
 			}
 			else if(in.equals("5")) // view inventory
 			{
-				libctrl.viewInventory();
+				Inventory inventory = libctrl.viewInventory();
+				for(Item item:inventory.getInventory()){
+					System.out.println(item.getTypeString()+":\t \""+item.getName()+"\"\t, code:"+item.getCode()+
+							"\t quantity:"+item.getQuantity());
+				}
 			}
 			else if(in.equals("6")) // exit
 			{
@@ -157,6 +162,9 @@ public class Main {
 			{
 				System.out.println("Please enter correct input.");
 			}
+			System.out.println("Continue? (y/n)");
+			in = input.nextLine();
+			if(!in.toLowerCase().contains("y"))break;
 		}
 	}
 

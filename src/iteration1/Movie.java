@@ -4,13 +4,13 @@ public class Movie implements Item{
 
 	private String code;
 	private String name;
-	private String type;
+	private int type = Item.MOVIE;
+	private String typeString = "Movie";
 	private int quantity;
 	
-	public Movie(String code, String name, String type, int quantity){
+	public Movie(String name, String code, int quantity){
 		this.code = code;
 		this.name = name;
-		this.type = type;
 		this.quantity = quantity;
 	}
 	@Override
@@ -24,8 +24,13 @@ public class Movie implements Item{
 	}
 
 	@Override
-	public String getType() {
+	public int getType() {
 		return type;
+	}
+	
+	@Override
+	public String getTypeString() {
+		return typeString;
 	}
 
 	@Override
@@ -33,24 +38,20 @@ public class Movie implements Item{
 		return quantity;
 	}
 	@Override
-	public String setCode() {
+	public void setCode() {
 		// TODO Auto-generated method stub
-		return null;
 	}
 	@Override
-	public String setName() {
+	public void setName() {
 		// TODO Auto-generated method stub
-		return null;
 	}
 	@Override
-	public String setType() {
+	public void setType() {
 		// TODO Auto-generated method stub
-		return null;
 	}
 	@Override
-	public int setQuantity() {
+	public void setQuantity() {
 		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }
