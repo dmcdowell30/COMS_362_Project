@@ -61,7 +61,6 @@ public class DatabaseSupport {
 	/////////////////////////////////////
 	
 	boolean putLibrarian(Librarian l){
-		System.out.println("Put Librarian: user:"+l.getUsername()+", pass:"+l.getPass());
 		
 		// determine if a current librarian exists with that username
 		String query = "SELECT * FROM `librarians` WHERE username = '"+l.getUsername()+"'";
@@ -85,7 +84,10 @@ public class DatabaseSupport {
 		String query = "SELECT * FROM `librarians` WHERE username = '"+username+"'";
 		String result = query(query);
 				
-		if(result.equals(""))return false;//result was empty. no librarian exists for username
+		if(result.equals("")){
+			System.out.println("Librarian does not exist...");
+			return false;
+		}
 		
 		query = "DELETE FROM `arlenb_coms362db`.`librarians` WHERE `librarians`.`username` = '"+username+"'";
 		result = query(query);
@@ -112,7 +114,10 @@ public class DatabaseSupport {
 		String query = "SELECT * FROM `customers` WHERE id = "+ id;
 		String result = query(query);
 
-		if (result.equals(""))return false;// result was empty. no librarian exists for username
+		if (result.equals("")){
+			System.out.println("Customer does not exist...");
+			return false;
+		}
 
 		query = "DELETE FROM `customers` WHERE `id` = "+id;
 		result = query(query);
@@ -212,7 +217,7 @@ public class DatabaseSupport {
 	}
 	
 	boolean removeInventoryItem(String code, int quantity){
-		// determine if the username exists.
+		// determine if the item exists.
 		String query = "SELECT * FROM `items` WHERE code = '"+code+"'";
 		String result = query(query);
 
@@ -223,7 +228,7 @@ public class DatabaseSupport {
 		result = query(query);
 
 		if (result.equals(""))
-			return true;// successful delete query returns exactly nothing.
+			return true;// successful update query returns exactly nothing.
 
 		return false;
 	}
