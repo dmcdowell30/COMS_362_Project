@@ -202,6 +202,35 @@ public class DatabaseSupport {
 		return inventory;
 	}
 	
+	Item getItem(String inCode){
+		
+		String query = "SELECT * FROM `items` WHERE code = '"+ inCode + "'";
+		String result = query(query);
+		
+		if (result.equals(""))return null;// result was empty. return null object.
+		
+		try {
+			JSONArray jArr = new JSONArray(result);
+			Item anItem = null;
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				String name = jobj.getString("name");
+				int type = jobj.getInt("type");
+				String code = jobj.getString("code");
+				int quantity = jobj.getInt("quantity");
+				int avail = jobj.getInt("avail");
+				
+				if(type==Item.BOOK)			anItem = new Book(name,code,quantity, avail);
+				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity, avail);
+				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity, avail);
+				
+				return anItem;
+			}
+		} catch (JSONException e) {return null;}
+		
+		return null;
+	}
+	
 	boolean putInventoryItem(Item i){
 		
 		String query = "SELECT * FROM `items` WHERE code = '"+ i.getCode() + "'";
