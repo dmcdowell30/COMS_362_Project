@@ -21,7 +21,10 @@ public class Main {
 			System.out.println("6) Pay Fines");
 			System.out.println("7) Modify Fines");
 			System.out.println("8) Add Fines");
-			System.out.println("9) Exit");
+			System.out.println("9) Check out Movie");
+			System.out.println("10) Check out Music");
+			System.out.println("11) Check out Book");
+			System.out.println("12) Exit");
 			
 			System.out.print("Choice: ");
 			String in = input.nextLine();
@@ -215,7 +218,61 @@ public class Main {
 					System.out.println("Successfully added fines");
 				}
 			}
-			else if(in.equals("9")) // exit
+			//checkout movie
+			else if(in.equals("9"))
+			{
+				System.out.print("Enter user id: ");
+				String user = input.nextLine();
+				int id = Integer.parseInt(user);
+				System.out.print("Enter Movie code: ");
+				String code = input.nextLine();
+				
+				if(libctrl.checkOutMovie(id, code))
+				{
+					System.out.println("Movie checkout success");
+				}
+				else
+				{
+					System.out.println("Movie checkout failed");
+				}
+			}
+			//checkout music
+			else if(in.equals("10"))
+			{
+				System.out.print("Enter user id: ");
+				String user = input.nextLine();
+				int id = Integer.parseInt(user);
+				System.out.print("Enter Music code: ");
+				String code = input.nextLine();
+				
+				if(libctrl.checkOutMusic(id, code))
+				{
+					System.out.println("Music checkout success");
+				}
+				else
+				{
+					System.out.println("Music checkout failed");
+				}
+			}
+			//checkout book
+			else if(in.equals("11"))
+			{
+				System.out.print("Enter user id: ");
+				String user = input.nextLine();
+				int id = Integer.parseInt(user);
+				System.out.print("Enter Book code: ");
+				String code = input.nextLine();
+				
+				if(libctrl.checkOutBook(id, code))
+				{
+					System.out.println("Book checkout success");
+				}
+				else
+				{
+					System.out.println("Book checkout failed");
+				}
+			}
+			else if(in.equals("12")) //exit
 			{
 				break;
 			}
