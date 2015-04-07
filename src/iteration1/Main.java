@@ -18,7 +18,10 @@ public class Main {
 			System.out.println("3) View a Customer");
 			System.out.println("4) View Customer List");
 			System.out.println("5) View Inventory");
-			System.out.println("6) Exit");
+			System.out.println("6) Pay Fines");
+			System.out.println("7) Modify Fines");
+			System.out.println("8) Add Fines");
+			System.out.println("9) Exit");
 			
 			System.out.print("Choice: ");
 			String in = input.nextLine();
@@ -159,7 +162,60 @@ public class Main {
 							"\t stock/avail: "+item.getQuantity()+"/"+item.getAvail());
 				}
 			}
-			else if(in.equals("6")) // exit
+			//pay fines
+			else if(in.equals("6"))
+			{
+				System.out.print("Enter user id: ");
+				String user = input.nextLine();
+				int id = Integer.parseInt(user);
+				
+				System.out.print("Enter amount to pay: ");
+				String line = input.nextLine();
+				int fine = Integer.parseInt(line);
+				
+				if(libctrl.payFines(id, fine) == false){
+					System.out.println("Could not find customer");
+				}
+				else{
+					System.out.println("Successfully paid fines");
+				}
+			}
+			//modify fines
+			else if(in.equals("7"))
+			{
+				System.out.print("Enter item id: ");
+				String id = input.nextLine();
+				
+				System.out.print("Enter new fine amount: ");
+				String line = input.nextLine();
+				int fine = Integer.parseInt(line);
+				
+				if(libctrl.modifyFine(id, fine) == false){
+					System.out.println("Could not find item");
+				}
+				else{
+					System.out.println("Successfully changed items fine");
+				}
+			}
+			//add fines
+			else if(in.equals("8"))
+			{
+				System.out.print("Enter user id: ");
+				String user = input.nextLine();
+				int id = Integer.parseInt(user);
+				
+				System.out.print("Enter amount to fine customer: ");
+				String line = input.nextLine();
+				int fine = Integer.parseInt(line);
+				
+				if(libctrl.addFines(id, fine) == false){
+					System.out.println("Could not find customer");
+				}
+				else{
+					System.out.println("Successfully added fines");
+				}
+			}
+			else if(in.equals("9")) // exit
 			{
 				break;
 			}
