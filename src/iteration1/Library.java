@@ -52,4 +52,58 @@ public class Library {
 	public ArrayList<Customer> viewCustomerList(){
 		return MyDatabaseSupport.getCustomerList();
 	}
+	
+	public boolean checkOutMovie(int id, String code) 
+	{
+		Movie mov = MyDatabaseSupport.getMovie(code);
+		
+		if(mov == null)
+		{
+			return false;
+		}
+		else
+		{
+			Checkout checkout = new Checkout(id, mov);
+			if(MyDatabaseSupport.putCheckout(checkout))
+			{
+				return true;
+			}
+		}
+	}
+	
+	public boolean checkOutBook(int id, String code) 
+	{
+		Book book = MyDatabaseSupport.getBook(code);
+		
+		if(book == null)
+		{
+			return false;
+		}
+		else
+		{
+			Checkout checkout = new Checkout(id, book);
+			if(MyDatabaseSupport.putCheckout(checkout))
+			{
+				return true;
+			}
+		}
+	}
+	
+	public boolean checkOutMusic(int id, String code) 
+	{
+		Music mus = MyDatabaseSupport.getMusic(code);
+		
+		if(mus == null)
+		{
+			return false;
+		}
+		else
+		{
+			Checkout checkout = new Checkout(id, mus);
+			if(MyDatabaseSupport.putCheckout(checkout))
+			{
+				return true;
+			}
+		}
+	}
 }
