@@ -109,4 +109,19 @@ public class LibraryController {
 		return lib.viewInventory();
 	}
 	
+	public boolean checkOutMovie(int id, String code)
+	{
+		return lib.checkOutMovie(id, code);
+	}
+	
+	public boolean checkOutBook(int id, String code)
+	{
+		return lib.checkOutBook(id, code);
+	}
+	
+	public boolean checkOutMusic(int id, String code)
+	{
+		return lib.checkOutMusic(id, code);
+	}
+	
 }
