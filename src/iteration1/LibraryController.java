@@ -10,7 +10,30 @@ public class LibraryController {
 	{
 		lib = new Library();
 	}
-	
+	public boolean payFines(int id, int fine)
+	{
+		if(lib.payFines(id, fine))
+		{
+			return true;
+		}
+		return false;
+	}
+	public boolean modifyFine(String code, int fine)
+	{
+		if(lib.modifyFine(code, fine))
+		{
+			return true;
+		}
+		return false;
+	}
+	public boolean addFines(int id, int fine)
+	{
+		if(lib.addFines(id, fine))
+		{
+			return true;
+		}
+		return false;
+	}
 	public boolean addLibrarian(String user, String pass)
 	{
 		if(lib.addLibrarian(user, pass))

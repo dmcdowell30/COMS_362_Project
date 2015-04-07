@@ -6,6 +6,7 @@ public class Movie implements Item{
 	private String name;
 	private String type;
 	private int quantity;
+	private int fine;
 	
 	public Movie(String code, String name, String type, int quantity){
 		this.code = code;
@@ -51,6 +52,16 @@ public class Movie implements Item{
 	public int setQuantity() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	@Override
+	public void modifyFine(int fine) {
+		this.fine += fine;
+	}
+	public int getFine() {
+		return fine;
+	}
+	public void setFine(int fine) {
+		this.fine = fine;
 	}
 
 }

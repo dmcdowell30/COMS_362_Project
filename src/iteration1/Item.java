@@ -11,4 +11,5 @@ public interface Item {
 	public String setName();
 	public String setType();
 	public int setQuantity();
+	public void modifyFine(int fine);
 }
