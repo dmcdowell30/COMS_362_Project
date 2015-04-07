@@ -20,6 +20,21 @@ public class Library {
 		Customer newCustomer = new Customer(name);
 		return MyDatabaseSupport.putCustomer(newCustomer);
 	}
+	public boolean payFines(int id, int fine){
+		Customer customer = MyDatabaseSupport.getCustomer(id);
+		customer.payFine(fine);
+		return MyDatabaseSupport.putCustomer(customer);
+	}
+	public boolean addFines(int id, int fine){
+		Customer customer = MyDatabaseSupport.getCustomer(id);
+		customer.addFine(fine);
+		return MyDatabaseSupport.putCustomer(customer);
+	}
+	public boolean modifyFine(String code, int fine){
+		Item item = MyDatabaseSupport.getItem(code);
+		item.modifyFine(fine);
+		return MyDatabaseSupport.putInventoryItem(item);
+	}
 	public boolean deleteCustomer(int id){
 		return MyDatabaseSupport.removeCustomer(id);
 	}

@@ -7,6 +7,7 @@ public class Movie implements Item{
 	private int type = Item.MOVIE;
 	private String typeString = "Movie";
 	private int quantity;
+	private int fine;
 	private int avail;
 	
 	public Movie(String name, String code, int quantity, int avail){
@@ -58,6 +59,16 @@ public class Movie implements Item{
 	@Override
 	public int getAvail() {
 		return avail;
+	}
+	@Override
+	public void modifyFine(int fine) {
+		this.fine += fine;
+	}
+	public int getFine() {
+		return fine;
+	}
+	public void setFine(int fine) {
+		this.fine = fine;
 	}
 
 }

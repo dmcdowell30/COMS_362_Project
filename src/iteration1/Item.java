@@ -11,9 +11,11 @@ public interface Item {
 	public int getType();
 	public String getTypeString();
 	public int getQuantity();
+	public void modifyFine(int fine);
 	public void setCode();
 	public void setName();
 	public void setType();
 	public void setQuantity();
 	public int getAvail();
+
 }

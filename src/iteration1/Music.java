@@ -6,6 +6,7 @@ public class Music implements Item{
 	private int type = Item.MUSIC;
 	private String typeString = "Music";
 	private int quantity;
+	private int fine;
 	private int avail;
 	
 	public Music(String name, String code, int quantity, int avail){
@@ -57,5 +58,16 @@ public class Music implements Item{
 	@Override
 	public int getAvail() {
 		return avail;
+	}
+	@Override
+	public void modifyFine(int fine) {
+		this.fine += fine;
+		
+	}
+	public int getFine() {
+		return fine;
+	}
+	public void setFine(int fine) {
+		this.fine = fine;
 	}
 }

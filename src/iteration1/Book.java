@@ -6,6 +6,7 @@ public class Book implements Item{
 	private int type = Item.BOOK;
 	private String typeString = "Book";
 	private int quantity;
+	private int fine;
 	private int avail;
 	
 	public Book(String name, String code, int quantity, int avail){
@@ -57,5 +58,15 @@ public class Book implements Item{
 	@Override
 	public int getAvail() {
 		return avail;
+	}
+	@Override
+	public void modifyFine(int fine) {
+		this.fine += fine;	
+	}
+	public int getFine() {
+		return fine;
+	}
+	public void setFine(int fine) {
+		this.fine = fine;
 	}
 }
