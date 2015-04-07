@@ -150,7 +150,9 @@ public class Main {
 			{
 				Inventory inventory = libctrl.viewInventory();
 				for(Item item:inventory.getInventory()){
-					System.out.println(item.getTypeString()+":\t \""+item.getName()+"\"\t, code:"+item.getCode()+
+					String title = "\""+item.getName()+"\"";
+					while(title.length()<25)title = title+" ";
+					System.out.println(item.getTypeString()+":\t"+title+"\t, code:"+item.getCode()+
 							"\t quantity:"+item.getQuantity());
 				}
 			}
