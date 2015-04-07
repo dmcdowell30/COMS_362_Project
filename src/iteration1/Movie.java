@@ -7,11 +7,13 @@ public class Movie implements Item{
 	private int type = Item.MOVIE;
 	private String typeString = "Movie";
 	private int quantity;
+	private int avail;
 	
-	public Movie(String name, String code, int quantity){
+	public Movie(String name, String code, int quantity, int avail){
 		this.code = code;
 		this.name = name;
 		this.quantity = quantity;
+		this.avail = avail;
 	}
 	@Override
 	public String getCode() {
@@ -52,6 +54,10 @@ public class Movie implements Item{
 	@Override
 	public void setQuantity() {
 		// TODO Auto-generated method stub
+	}
+	@Override
+	public int getAvail() {
+		return avail;
 	}
 
 }

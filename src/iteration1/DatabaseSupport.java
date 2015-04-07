@@ -188,10 +188,11 @@ public class DatabaseSupport {
 				int type = jobj.getInt("type");
 				String code = jobj.getString("code");
 				int quantity = jobj.getInt("quantity");
+				int avail = jobj.getInt("avail");
 				
-				if(type==Item.BOOK)			anItem = new Book(name,code,quantity);
-				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity);
-				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity);
+				if(type==Item.BOOK)			anItem = new Book(name,code,quantity, avail);
+				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity, avail);
+				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity, avail);
 				
 				itemList.add(anItem);
 			}
@@ -209,8 +210,8 @@ public class DatabaseSupport {
 		if (!result.equals(""))
 			return false;// result wasn't empty. Item with same code already exists.
 		
-		query = "INSERT INTO `items` (`id`, `name`, `type`, `code`, `quantity`) "
-				+ "VALUES (NULL, '"+i.getName()+"', '"+i.getType()+"', '"+i.getCode()+"', '"+i.getQuantity()+"')";
+		query = "INSERT INTO `items` (`id`, `name`, `type`, `code`, `quantity`, `avail`) "
+				+ "VALUES (NULL, '"+i.getName()+"', '"+i.getType()+"', '"+i.getCode()+"', '"+i.getQuantity()+"', '"+i.getAvail()+"')";
 		result = query(query);
 		
 		if(result.equals(""))return true;

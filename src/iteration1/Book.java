@@ -6,11 +6,13 @@ public class Book implements Item{
 	private int type = Item.BOOK;
 	private String typeString = "Book";
 	private int quantity;
+	private int avail;
 	
-	public Book(String name, String code, int quantity){
+	public Book(String name, String code, int quantity, int avail){
 		this.code = code;
 		this.name = name;
 		this.quantity = quantity;
+		this.avail = avail;
 	}
 	@Override
 	public String getCode() {
@@ -51,5 +53,9 @@ public class Book implements Item{
 	@Override
 	public void setQuantity() {
 		// TODO Auto-generated method stub
+	}
+	@Override
+	public int getAvail() {
+		return avail;
 	}
 }

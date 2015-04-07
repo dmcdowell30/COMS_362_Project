@@ -29,14 +29,14 @@ public class Library {
 	public boolean addInventoryItem(int type, String name, String code, int quantity){
 		Item newItem;
 		if(type == Item.BOOK){
-			newItem = new Book(name, code, quantity);
+			newItem = new Book(name, code, quantity, quantity);
 		}
 		else if(type == Item.MOVIE){
-			newItem = new Movie(name, code, quantity);
+			newItem = new Movie(name, code, quantity, quantity);
 
 		}
 		else if(type == Item.MUSIC){
-			newItem = new Music(name, code, quantity);
+			newItem = new Music(name, code, quantity, quantity);
 		}
 		else{
 			return false;

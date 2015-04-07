@@ -15,4 +15,5 @@ public interface Item {
 	public void setName();
 	public void setType();
 	public void setQuantity();
+	public int getAvail();
 }
