@@ -1,145 +1,281 @@
 package iteration1;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 
 public class DatabaseSupport {
 	
 	
-	private String query(String command){
+	public String query(String command){
+		//System.out.println("Query: "+command);
 		String result = "";
+		String charset = "UTF-8";
+		String url = "http://databasesupport.arlenburroughs.com/db_query2.php";
+		String query = "";
 		
-		//TODO send query. Get Back result.
-		HttpClient httpclient = HttpClients.createDefault();
-		HttpPost httppost = new HttpPost("http://databasesupport.arlenburroughs.com/db_query.php");
-
-		// Request parameters and other properties.
-		List<NameValuePair> params = new ArrayList<NameValuePair>(2);
-		params.add(new BasicNameValuePair("query", command));
-		httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-
-		//Execute and get the response.
-		HttpResponse response = httpclient.execute(httppost);
-		HttpEntity entity = response.getEntity();
-
-		if (entity != null) {
-		    InputStream instream = entity.getContent();
-		  //convert response to string
-			try{
-			        BufferedReader reader = new BufferedReader(new InputStreamReader(instream,"iso-8859-1"),8);
-			        StringBuilder sb = new StringBuilder();
-			        String line = null;
-			        while ((line = reader.readLine()) != null) {
-			                sb.append(line + "\n");
-			        }
-			        instream.close();
-			        result=sb.toString();
-			        
-			}catch(Exception e){
-			        return "CF";
-			}
+		URLConnection connection;
+		String contentType = null;
+		InputStream response = null;
+		try {
+			query = "?query="+URLEncoder.encode(command, "UTF-8");
+			connection = new URL(url+query).openConnection();
+			connection.setRequestProperty("Accept-Charset", charset);
+			response = connection.getInputStream();
 			
-			return result;
+			contentType = connection.getHeaderField("Content-Type");
+		} catch (IOException e1) {
+			System.out.println("Error1");
+			e1.printStackTrace();
 		}
-		
-		System.out.println(result);
+
+		if (charset != null) {
+		    try (BufferedReader reader = new BufferedReader(new InputStreamReader(response, charset))) {
+		        for (String line; (line = reader.readLine()) != null;) {
+		            result = result+line;
+		        }
+		    } catch (IOException e) {
+		    	System.out.println("Error2");
+				e.printStackTrace();
+			}
+		}
+
+		//System.out.println("From DB: "+result);
 		return result;
 	}
 	
 	
 	/////////////////////////////////////
-	////// Below are from Class Diagram
-	//////////////////////////
-	
+	////// Below are from Class Diagram 
+	/////////////////////////////////////
 	
 	boolean putLibrarian(Librarian l){
-		boolean success = false;
 		
-		String query = "INSERT INTO 'arlenb_coms362db'.'librarians' ('id', 'username', 'password') "+
-		"VALUES (NULL, '"+l.getUsername()+"', '"+"librarian password"+"');";
+		// determine if a current librarian exists with that username
+		String query = "SELECT * FROM `librarians` WHERE username = '"+l.getUsername()+"'";
+		String result = query(query);
 		
-		query(query);
+		if(!result.equals("")){
+			return false;//result wasn't empty. A librarian exists, or db error.
+		}
 		
-		return success;
+		
+		query = "INSERT INTO `librarians` (`id`, `username`, `password`) "
+				+ "VALUES (NULL, '"+l.getUsername()+"', '"+l.getPass()+"');";
+		result = query(query);
+		
+		if(result.equals(""))return true;//successful insert query returns exactly nothing.
+		
+		return true;
 	}
 	
 	boolean removeLibrarian(String username){
-		boolean success = false;
 		
-		String query = "DELETE FROM 'arlenb_coms362db'.'librarians' WHERE 'username' = '"+username+"';";
+		// determine if the username exists.
+		String query = "SELECT * FROM `librarians` WHERE username = '"+username+"'";
 		String result = query(query);
+				
+		if(result.equals("")){
+			System.out.println("Librarian does not exist...");
+			return false;
+		}
 		
-		if(result.length()>0)success = true;
+		query = "DELETE FROM `arlenb_coms362db`.`librarians` WHERE `librarians`.`username` = '"+username+"'";
+		result = query(query);
 		
-		return success;
+		if(result.equals(""))return true;//successful delete query returns exactly nothing.
+		
+		return false;
 	}
 	
 	boolean putCustomer(Customer c){
-		boolean success = false;
+		System.out.println("Put Customer: user:"+c.getName());
 		
-		String query = "INSERT INTO 'arlenb_coms362db'.'customers' ('id', 'username', 'password') "+
-				"VALUES (NULL, '"+c.getName()+"', '"+"customer password"+"');";
-				
-		String response = query(query);
+		String query = "INSERT INTO `customers` (`id`, `name`) "
+				+ "VALUES (NULL, '"+c.getName()+"')";
+		String result = query(query);
 		
-		return success;
+		if(result.equals(""))return true;//successful insert query returns exactly nothing.
+		
+		return false;
 	}
 	
-	Inventory RequestInventory(){
-		Inventory inventory = new Inventory();
-		
-		String query = "SELECT * FROM 'arlenb_coms362db'.'inventory';";
-				
-		String response = query(query);
-		
-		return inventory;
+	boolean removeCustomer(int id){
+		// determine if the username exists.
+		String query = "SELECT * FROM `customers` WHERE id = "+ id;
+		String result = query(query);
+
+		if (result.equals("")){
+			System.out.println("Customer does not exist...");
+			return false;
+		}
+
+		query = "DELETE FROM `customers` WHERE `id` = "+id;
+		result = query(query);
+
+		if (result.equals(""))return true;// successful delete query returns exactly nothing.
+
+		return false;
 	}
 	
 	Customer getCustomer(int id){
-		Customer customer;
+		Customer customer = null;
 		
-		String query = "SELECT * FROM 'arlenb_coms362db'.'customers'"+
-		"WHERE id = '"+id+"'";
-		String response = query(query);
+		String query = "SELECT * FROM `customers` WHERE id = "+ id;
+		String result = query(query);
 		
-		return null;
+		if (result.equals(""))return customer;// result was empty. return null object.
+		try {
+			JSONArray jArr = new JSONArray(result);
+			JSONObject jobj = jArr.getJSONObject(0);
+			customer = new Customer(jobj.getString("name"));
+			customer.setId(Integer.parseInt(jobj.getString("id")));
+		} catch (JSONException e) {e.printStackTrace();}
+		
+		
+		return customer;
 	}
 	
 	ArrayList<Customer> getCustomerList(){
 		
 		ArrayList<Customer> customerList = new ArrayList<Customer>();
 		
-		String query = "SELECT * FROM 'arlenb_coms362db'.'customers';";
-		String response = query(query);
+		String query = "SELECT * FROM `customers`";
+		String result = query(query);
+		
+		if (result.equals(""))return customerList;// result was empty. return null object.
+		try {
+			JSONArray jArr = new JSONArray(result);
+			Customer aCustomer;
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				aCustomer = new Customer(jobj.getString("name"));
+				aCustomer.setId(Integer.parseInt(jobj.getString("id")));
+				customerList.add(aCustomer);
+			}
+		} catch (JSONException e) {e.printStackTrace();}
 		
 		return customerList;
 	}
 	
-	boolean removeCustomer(int id){
-		boolean success = false;
+	Inventory RequestInventory(){
 		
-		return success;
+		Inventory inventory = new Inventory();
+		ArrayList<Item> itemList = new ArrayList<Item>();
+		
+		String query = "SELECT * FROM `items`";
+		String result = query(query);
+		
+		if (result.equals(""))return null;// result was empty. return null object.
+		
+		try {
+			JSONArray jArr = new JSONArray(result);
+			Item anItem = null;
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				String name = jobj.getString("name");
+				int type = jobj.getInt("type");
+				String code = jobj.getString("code");
+				int quantity = jobj.getInt("quantity");
+				int avail = jobj.getInt("avail");
+				
+				if(type==Item.BOOK)			anItem = new Book(name,code,quantity, avail);
+				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity, avail);
+				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity, avail);
+				
+				itemList.add(anItem);
+			}
+		} catch (JSONException e) {return null;}
+		
+		inventory.setItemList(itemList);
+		return inventory;
+	}
+	
+	Item getItem(String inCode){
+		
+		String query = "SELECT * FROM `items` WHERE code = '"+ inCode + "'";
+		String result = query(query);
+		
+		if (result.equals(""))return null;// result was empty. return null object.
+		
+		try {
+			JSONArray jArr = new JSONArray(result);
+			Item anItem = null;
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				String name = jobj.getString("name");
+				int type = jobj.getInt("type");
+				String code = jobj.getString("code");
+				int quantity = jobj.getInt("quantity");
+				int avail = jobj.getInt("avail");
+				
+				if(type==Item.BOOK)			anItem = new Book(name,code,quantity, avail);
+				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity, avail);
+				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity, avail);
+				
+				return anItem;
+			}
+		} catch (JSONException e) {return null;}
+		
+		return null;
 	}
 	
 	boolean putInventoryItem(Item i){
-		boolean success = false;
 		
-		return success;
+		String query = "SELECT * FROM `items` WHERE code = '"+ i.getCode() + "'";
+		String result = query(query);
+
+		if (!result.equals(""))
+			return false;// result wasn't empty. Item with same code already exists.
+		
+		query = "INSERT INTO `items` (`id`, `name`, `type`, `code`, `quantity`, `avail`) "
+				+ "VALUES (NULL, '"+i.getName()+"', '"+i.getType()+"', '"+i.getCode()+"', '"+i.getQuantity()+"', '"+i.getAvail()+"')";
+		result = query(query);
+		
+		if(result.equals(""))return true;
+		
+		return false;
 	}
 	
-	boolean removeInventoryItem(String code, int quantity){
-		boolean success = false;
+	boolean removeInventoryItem(String code, int toRemove){
+		// determine if the item exists.
+		String query = "SELECT * FROM `items` WHERE code = '"+code+"'";
+		String result = query(query);
+
+		if (result.equals(""))
+			return false;// result was empty. no item exists for code
 		
-		return success;
+		int quantity =0;
+		int avail = 0;
+		try {
+			JSONArray jArr = new JSONArray(result);
+			Item anItem = null;
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				quantity = jobj.getInt("quantity");
+				avail = jobj.getInt("avail");
+			}
+		} catch (JSONException e) {return false;}
+		if(avail-toRemove <0)return false;
+
+		query = "UPDATE `items` SET `quantity` = '"+(quantity-toRemove)+"', `avail` = '"+(avail-toRemove)+"' WHERE `code` = "+code;
+		result = query(query);
+
+		if (result.equals(""))
+			return true;// successful update query returns exactly nothing.
+		
+
+		return false;
 	}
 }

@@ -1,5 +1,6 @@
 package iteration1;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -11,7 +12,7 @@ public class Main {
 		
 		while(true)
 		{
-			System.out.println("What would you like to do?");
+			System.out.println("\nWhat would you like to do?");
 			System.out.println("1) Add something");
 			System.out.println("2) Delete something");
 			System.out.println("3) View a Customer");
@@ -23,12 +24,13 @@ public class Main {
 			String in = input.nextLine();
 			System.out.println();
 			
-			if(in.equals("1"))
+			boolean success;
+			if(in.equals("1"))// add
 			{
 				System.out.println("What would you like to add?");
 				System.out.println("1) Librarian");
 				System.out.println("2) Customer");
-				System.out.println("3) Inventory Item");
+				System.out.println("3) New Inventory Item");
 				System.out.println("Choice: ");
 				
 				in = input.nextLine();
@@ -41,32 +43,32 @@ public class Main {
 					System.out.print("Enter password first: ");
 					String pass = input.nextLine();
 					
-					libctrl.addLibrarian(user, pass);
+					success = libctrl.addLibrarian(user, pass);
 				}
 				else if(in.equals("2"))
 				{
 					System.out.print("Enter username: ");
 					String user = input.nextLine();
 					
-					libctrl.addCustomer(user);
+					success = libctrl.addCustomer(user);
 				}
 				else if(in.equals("3"))
 				{
-					System.out.print("Enter item code: ");
-					String code = input.nextLine();
-
+					System.out.print("Enter item type (0:Book, 1:Movie, 2:Music): ");
+					String itemType = input.nextLine();
+					int type = Integer.parseInt(itemType);
+					
 					System.out.print("Enter item name: ");
 					String name = input.nextLine();
-
-					System.out.print("Enter item type: ");
-					String type = input.nextLine();
+					
+					System.out.print("Enter item code: ");
+					String code = input.nextLine();
 
 					System.out.print("Enter item quantity: ");
 					String quan = input.nextLine();
 					int quantity = Integer.parseInt(quan);
 					
-					
-					libctrl.addInventoryItem(code, name, type, quantity);
+					success = libctrl.addInventoryItem(type, name, code, quantity);
 				}
 				else
 				{
@@ -74,8 +76,11 @@ public class Main {
 					break;
 				}
 				
+				if(success)System.out.println("\nAdd Complete!");
+				else System.out.println("\nAdd Failed.");
+				
 			}
-			else if(in.equals("2"))
+			else if(in.equals("2"))// delete
 			{
 				System.out.println("What would you like to delete?");
 				System.out.println("1) Librarian");
@@ -88,22 +93,22 @@ public class Main {
 				
 				if(in.equals("1"))
 				{
-					System.out.print("Enter username: ");
+					System.out.print("Enter librarian username to remove: ");
 					String user = input.nextLine();
 					
-					libctrl.deleteLibrarian(user);
+					success = libctrl.deleteLibrarian(user);
 				}
 				else if(in.equals("2"))
 				{
-					System.out.print("Enter customer id: ");
+					System.out.print("Enter customer id to remove: ");
 					String id = input.nextLine();
 					int ID = Integer.parseInt(id);
 					
-					libctrl.deleteCustomer(ID);
+					success = libctrl.deleteCustomer(ID);
 				}
 				else if(in.equals("3"))
 				{
-					System.out.print("Enter item code: ");
+					System.out.print("Enter item code to remove: ");
 					String code = input.nextLine();
 
 					System.out.print("Enter item quantity: ");
@@ -111,31 +116,50 @@ public class Main {
 					int quantity = Integer.parseInt(quan);
 					
 					
-					libctrl.deleteInventoryItem(code, quantity);
+					success = libctrl.deleteInventoryItem(code, quantity);
 				}
 				else
 				{
 					System.out.println("Command not recognized. Exiting program...");
 					break;
 				}
+				if(success)System.out.println("\nRemove Operation Complete!");
+				else System.out.println("\nRemove Operation Failed.");
+				
 			}
-			else if(in.equals("3"))
+			else if(in.equals("3"))// view a customer
 			{
 				System.out.print("Enter user id: ");
 				String user = input.nextLine();
 				int id = Integer.parseInt(user);
 				
-				libctrl.viewCustomer(id);
+				Customer cust = libctrl.viewCustomer(id);
+				if(cust == null)System.out.println("Lookup Failed - Null Customer Received");
+				else{
+					System.out.println("Customer id: "+id+", name: "+cust.getName());
+				}
 			}
-			else if(in.equals("4"))
+			else if(in.equals("4")) // view customer list
 			{
-				libctrl.viewCustomerList();
+				ArrayList<Customer> custList = libctrl.viewCustomerList();
+				for(Customer customer: custList){
+					System.out.println("Customer id: "+customer.getId()+", name: "+customer.getName());
+				}
 			}
-			else if(in.equals("5"))
+			else if(in.equals("5")) // view inventory
 			{
-				libctrl.viewInventory();
+				Inventory inventory = libctrl.viewInventory();
+				
+				for(Item item:inventory.getInventory()){
+					String title = "\""+item.getName()+"\"";
+					while(title.length()<25)title = title+" ";
+					String code = ""+item.getCode();
+					while(code.length()<15)code = code+" ";
+					System.out.println(item.getTypeString()+":\t"+title+"\t code:"+code+
+							"\t stock/avail: "+item.getQuantity()+"/"+item.getAvail());
+				}
 			}
-			else if(in.equals("6"))
+			else if(in.equals("6")) // exit
 			{
 				break;
 			}
@@ -143,7 +167,11 @@ public class Main {
 			{
 				System.out.println("Please enter correct input.");
 			}
+			System.out.print("Continue? (y/n) ");
+			in = input.nextLine();
+			if(!in.toLowerCase().contains("y"))break;
 		}
+		System.out.println("Have a good day! Let me know if you need some lip therapy.");
 	}
 
 }

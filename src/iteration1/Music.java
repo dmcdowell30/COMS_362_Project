@@ -3,15 +3,17 @@ package iteration1;
 public class Music implements Item{
 	private String code;
 	private String name;
-	private String type;
+	private int type = Item.MUSIC;
+	private String typeString = "Music";
 	private int quantity;
 	private int fine;
+	private int avail;
 	
-	public Music(String code, String name, String type, int quantity){
+	public Music(String name, String code, int quantity, int avail){
 		this.code = code;
 		this.name = name;
-		this.type = type;
 		this.quantity = quantity;
+		this.avail = avail;
 	}
 	@Override
 	public String getCode() {
@@ -24,8 +26,13 @@ public class Music implements Item{
 	}
 
 	@Override
-	public String getType() {
+	public int getType() {
 		return type;
+	}
+	
+	@Override
+	public String getTypeString() {
+		return typeString;
 	}
 
 	@Override
@@ -33,24 +40,24 @@ public class Music implements Item{
 		return quantity;
 	}
 	@Override
-	public String setCode() {
+	public void setCode() {
 		// TODO Auto-generated method stub
-		return null;
 	}
 	@Override
-	public String setName() {
+	public void setName() {
 		// TODO Auto-generated method stub
-		return null;
 	}
 	@Override
-	public String setType() {
+	public void setType() {
 		// TODO Auto-generated method stub
-		return null;
 	}
 	@Override
-	public int setQuantity() {
+	public void setQuantity() {
 		// TODO Auto-generated method stub
-		return 0;
+	}
+	@Override
+	public int getAvail() {
+		return avail;
 	}
 	@Override
 	public void modifyFine(int fine) {

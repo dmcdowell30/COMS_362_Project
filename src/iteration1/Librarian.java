@@ -4,7 +4,7 @@ public class Librarian {
 
 	private String pass;
 	private String username;
-	public Librarian(String pass, String username){
+	public Librarian(String username, String pass){
 		this.pass = pass;
 		this.username = username;
 	}

@@ -76,18 +76,12 @@ public class LibraryController {
 	
 	public Customer viewCustomer(int id)
 	{
-		Customer cust = lib.viewCustomer(id);
-		
-		System.out.println("Customer: " + cust);
-//		System.out.println("Name: " + cust.getName());
-//		System.out.println("ID: " + cust.getID);
-		
-		return cust;
+		return lib.viewCustomer(id);
 	}
 	
-	public boolean addInventoryItem(String name, String type, String code, int quantity)
+	public boolean addInventoryItem(int type, String name, String code, int quantity)
 	{
-		if(lib.addInventoryItem(name, type, code, quantity))
+		if(lib.addInventoryItem(type, name, code, quantity))
 		{
 			return true;
 		}
@@ -107,20 +101,12 @@ public class LibraryController {
 	
 	public ArrayList<Customer> viewCustomerList()
 	{
-		ArrayList<Customer> custList = lib.viewCustomerList();
-		
-		System.out.println("Customer List: " + custList);
-		
-		return custList;
+		return lib.viewCustomerList();
 	}
 	
 	public Inventory viewInventory()
 	{
-		Inventory inv = lib.viewInventory();
-		
-		System.out.println("Inventory: " + inv);
-		
-		return inv;
+		return lib.viewInventory();
 	}
 	
 }
