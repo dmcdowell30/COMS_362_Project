@@ -30,7 +30,7 @@ public class Main {
 				System.out.println("What would you like to add?");
 				System.out.println("1) Librarian");
 				System.out.println("2) Customer");
-				System.out.println("3) Inventory Item");
+				System.out.println("3) New Inventory Item");
 				System.out.println("Choice: ");
 				
 				in = input.nextLine();
@@ -149,11 +149,14 @@ public class Main {
 			else if(in.equals("5")) // view inventory
 			{
 				Inventory inventory = libctrl.viewInventory();
+				
 				for(Item item:inventory.getInventory()){
 					String title = "\""+item.getName()+"\"";
 					while(title.length()<25)title = title+" ";
-					System.out.println(item.getTypeString()+":\t"+title+"\t, code:"+item.getCode()+
-							"\t quantity:"+item.getQuantity());
+					String code = ""+item.getCode();
+					while(code.length()<15)code = code+" ";
+					System.out.println(item.getTypeString()+":\t"+title+"\t code:"+code+
+							"\t stock/avail: "+item.getQuantity()+"/"+item.getAvail());
 				}
 			}
 			else if(in.equals("6")) // exit

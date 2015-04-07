@@ -219,19 +219,33 @@ public class DatabaseSupport {
 		return false;
 	}
 	
-	boolean removeInventoryItem(String code, int quantity){
+	boolean removeInventoryItem(String code, int toRemove){
 		// determine if the item exists.
 		String query = "SELECT * FROM `items` WHERE code = '"+code+"'";
 		String result = query(query);
 
 		if (result.equals(""))
 			return false;// result was empty. no item exists for code
+		
+		int quantity =0;
+		int avail = 0;
+		try {
+			JSONArray jArr = new JSONArray(result);
+			Item anItem = null;
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				quantity = jobj.getInt("quantity");
+				avail = jobj.getInt("avail");
+			}
+		} catch (JSONException e) {return false;}
+		if(avail-toRemove <0)return false;
 
-		query = "UPDATE `items` SET `quantity` = '"+quantity+"' WHERE `code` = "+code;
+		query = "UPDATE `items` SET `quantity` = '"+(quantity-toRemove)+"', `avail` = '"+(avail-toRemove)+"' WHERE `code` = "+code;
 		result = query(query);
 
 		if (result.equals(""))
 			return true;// successful update query returns exactly nothing.
+		
 
 		return false;
 	}
