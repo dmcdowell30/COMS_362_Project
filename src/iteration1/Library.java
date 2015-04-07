@@ -70,7 +70,7 @@ public class Library {
 	
 	public boolean checkOutMovie(int id, String code) 
 	{
-		Movie mov = MyDatabaseSupport.getItem(code);
+		Movie mov = (Movie) MyDatabaseSupport.getItem(code);
 		
 		if(mov == null)
 		{
@@ -88,7 +88,7 @@ public class Library {
 	
 	public boolean checkOutBook(int id, String code) 
 	{
-		Book book = MyDatabaseSupport.getItem(code);
+		Book book = (Book) MyDatabaseSupport.getItem(code);
 		
 		if(book == null)
 		{
@@ -106,7 +106,7 @@ public class Library {
 	
 	public boolean checkOutMusic(int id, String code) 
 	{
-		Music mus = MyDatabaseSupport.getItem(code);
+		Music mus = (Music) MyDatabaseSupport.getItem(code);
 		
 		if(mus == null)
 		{
