@@ -19,7 +19,7 @@ public class DatabaseSupport {
 	
 	
 	public String query(String command){
-		//System.out.println("Query: "+command);
+		//System.out.println("Query: "+command);//TODO debug
 		String result = "";
 		String charset = "UTF-8";
 		String url = "http://databasesupport.arlenburroughs.com/db_query2.php";
@@ -100,10 +100,12 @@ public class DatabaseSupport {
 	}
 	
 	boolean putCustomer(Customer c){
-		System.out.println("Put Customer: user:"+c.getName());
 		
-		String query = "INSERT INTO `customers` (`id`, `name`) "
-				+ "VALUES (NULL, '"+c.getName()+"')";
+		int id = c.getId();
+
+		String query = "INSERT INTO `customers` (`id`, `name`, `fine`) "
+				+ "VALUES ('"+id+"', '"+c.getName()+"', '"+c.getFines()+"') "
+						+ " ON DUPLICATE KEY UPDATE id = '"+c.getId()+"'";
 		String result = query(query);
 		
 		if(result.equals(""))return true;//successful insert query returns exactly nothing.
@@ -141,6 +143,7 @@ public class DatabaseSupport {
 			JSONObject jobj = jArr.getJSONObject(0);
 			customer = new Customer(jobj.getString("name"));
 			customer.setId(Integer.parseInt(jobj.getString("id")));
+			removeCustomer(id);
 		} catch (JSONException e) {e.printStackTrace();}
 		
 		
@@ -275,7 +278,95 @@ public class DatabaseSupport {
 		if (result.equals(""))
 			return true;// successful update query returns exactly nothing.
 		
-
 		return false;
 	}
+
+
+	public Checkout getCheckout(int id){
+		
+		String query = "SELECT * FROM `checkouts` WHERE id = '"+ id + "'";
+		String result = query(query);
+		
+		Checkout c = null;
+		try {
+			JSONArray jArr = new JSONArray(result);
+			JSONObject jobj = jArr.getJSONObject(0);
+			int idBack = jobj.getInt("id");
+			int custId = jobj.getInt("cust_id");
+			String code = jobj.getString("item_code");
+			String date = jobj.getString("date_due");
+
+			Item item = getItem(code);
+			c = new Checkout(custId, item);
+			c.setId(idBack);
+			c.setDueDate(date);
+			
+			returnCheckout(idBack);
+			
+		} catch (JSONException e) {return null;}
+		
+		return c;
+	}
+
+	public boolean putCheckout(Checkout c){
+		String query = "INSERT INTO `arlenb_coms362db`.`checkouts` (`id`, `cust_id`, `item_code`, `date_due`) "
+				+ "VALUES ('"+c.getId()+"', '"+c.getCustomerId()+"', '"+c.getItem().getCode()+"', '"+c.getDueDate()+"');";
+		String result = query(query);
+		
+		System.out.println("Result:"+result);
+		
+		if (result.equals(""))
+			return true;// successful update query returns exactly nothing.
+		return false;
+	}
+
+	public boolean returnCheckout(int id){
+
+		// determine if the checkout exists.
+		String query = "SELECT * FROM `checkouts` WHERE id = '"+id+"'";
+		String result = query(query);
+						
+		if(result.equals("")){
+			System.out.println("Checkout does not exist...");
+			return false;
+		}
+				
+		query = "DELETE FROM `arlenb_coms362db`.`checkouts` WHERE `checkouts`.`id` = '"+id+"'";
+		result = query(query);
+				
+		if(result.equals(""))return true;
+		
+		return false;
+	}
+
+	public ArrayList<Checkout> getCheckOuts(){
+		
+		ArrayList<Checkout> checkouts = new ArrayList<Checkout>();
+		
+		String query = "SELECT * FROM `checkouts`";
+		String result = query(query);
+		
+		if (result.equals(""))return null;// result was empty. return null object.
+		
+		try {
+			JSONArray jArr = new JSONArray(result);
+			Checkout c = null;
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				int id = jobj.getInt("id");
+				int custId = jobj.getInt("cust_id");
+				String code = jobj.getString("item_code");
+				String date = jobj.getString("date_due");
+				
+				Item item = getItem(code);
+				c = new Checkout(custId, item);
+				c.setId(id);
+				c.setDueDate(date);
+				checkouts.add(c);
+			}
+		} catch (JSONException e) {return null;}
+		
+		return checkouts;
+	}
+
 }

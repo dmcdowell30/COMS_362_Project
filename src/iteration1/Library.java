@@ -84,6 +84,7 @@ public class Library {
 				return true;
 			}
 		}
+		return false;
 	}
 	
 	public boolean checkOutBook(int id, String code) 
@@ -102,6 +103,7 @@ public class Library {
 				return true;
 			}
 		}
+		return false;
 	}
 	
 	public boolean checkOutMusic(int id, String code) 
@@ -120,5 +122,23 @@ public class Library {
 				return true;
 			}
 		}
+		return false;
+	}
+	
+	public boolean renewCheckout(int id){
+		Checkout checkout = MyDatabaseSupport.getCheckout(id);
+		System.out.println("Item: "+checkout.getItem().getName());
+		System.out.println("Old Due Date: "+checkout.getDueDate());
+		checkout.renew();
+		
+		return MyDatabaseSupport.putCheckout(checkout);
+	}
+
+	public boolean returnCheckout(int id){
+		return MyDatabaseSupport.returnCheckout(id);
+	}
+
+	public ArrayList<Checkout> viewCheckOutItems(){
+		return MyDatabaseSupport.getCheckOuts();
 	}
 }

@@ -24,7 +24,10 @@ public class Main {
 			System.out.println("9) Check out Movie");
 			System.out.println("10) Check out Music");
 			System.out.println("11) Check out Book");
-			System.out.println("12) Exit");
+			System.out.println("12) Return Checkout");
+			System.out.println("13) Renew Checkout");
+			System.out.println("14) View all Checkouts");
+			System.out.println("15) Exit");
 			
 			System.out.print("Choice: ");
 			String in = input.nextLine();
@@ -272,7 +275,50 @@ public class Main {
 					System.out.println("Book checkout failed");
 				}
 			}
-			else if(in.equals("12")) //exit
+			//Return Checkout
+			else if(in.equals("12"))
+			{
+				System.out.print("Enter checkout id: ");
+				int id = Integer.parseInt(input.nextLine());
+				
+				if(libctrl.returnCheckout(id))
+				{
+					System.out.println("Checkout Return succeeded");
+				}
+				else
+				{
+					System.out.println("Checkout Return failed");
+				}
+			}
+			//Renew Checkout
+			else if(in.equals("13"))
+			{
+				System.out.print("Enter checkout id to renew: ");
+				String user = input.nextLine();
+				int id = Integer.parseInt(user);
+
+				if(libctrl.renewCheckout(id))
+				{
+					System.out.println("Renew success");
+				}
+				else
+				{
+					System.out.println("Renew failed");
+				}
+			}
+			//View Checkouts
+			else if(in.equals("14"))
+			{
+				ArrayList<Checkout> checkouts = libctrl.viewCheckOutItems();
+				if(checkouts == null){
+					System.out.println("Operation Failed.");
+				}
+				for(Checkout co:checkouts){
+					Item it = co.getItem();
+					System.out.println("Checkout id: "+co.getId()+"\t Customer id: "+co.getCustomerId()+"\t Due: "+co.getDueDate()+"\t "+it.getTypeString()+": "+it.getName());
+				}
+			}
+			else if(in.equals("15")) //exit
 			{
 				break;
 			}

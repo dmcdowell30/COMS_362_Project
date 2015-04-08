@@ -124,4 +124,16 @@ public class LibraryController {
 		return lib.checkOutMusic(id, code);
 	}
 	
+	public boolean renewCheckout(int id){
+		return lib.renewCheckout(id);
+	}
+
+	public boolean returnCheckout(int id){
+		return lib.returnCheckout(id);
+	}
+
+	public ArrayList<Checkout> viewCheckOutItems(){
+		return lib.viewCheckOutItems();
+	}
+	
 }
