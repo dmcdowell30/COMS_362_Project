@@ -145,14 +145,14 @@ public class Main {
 				Customer cust = libctrl.viewCustomer(id);
 				if(cust == null)System.out.println("Lookup Failed - Null Customer Received");
 				else{
-					System.out.println("Customer id: "+id+", name: "+cust.getName());
+					System.out.println("Customer id: "+cust.getId()+"\t name: "+cust.getName()+"\t Fines: $"+cust.getFines());
 				}
 			}
 			else if(in.equals("4")) // view customer list
 			{
 				ArrayList<Customer> custList = libctrl.viewCustomerList();
 				for(Customer customer: custList){
-					System.out.println("Customer id: "+customer.getId()+", name: "+customer.getName());
+					System.out.println("Customer id: "+customer.getId()+"\t name: "+customer.getName()+"\t Fines: $"+customer.getFines());
 				}
 			}
 			else if(in.equals("5")) // view inventory

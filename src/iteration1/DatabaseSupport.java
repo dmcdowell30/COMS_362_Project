@@ -18,7 +18,7 @@ import org.json.JSONObject;
 public class DatabaseSupport {
 	
 	
-	public String query(String command){
+	private String query(String command){
 		//System.out.println("Query: "+command);//TODO debug
 		String result = "";
 		String charset = "UTF-8";
@@ -100,7 +100,7 @@ public class DatabaseSupport {
 	}
 	
 	boolean putCustomer(Customer c){
-		
+		removeCustomer(c.getId());
 		int id = c.getId();
 
 		String query = "INSERT INTO `customers` (`id`, `name`, `fine`) "
@@ -143,7 +143,7 @@ public class DatabaseSupport {
 			JSONObject jobj = jArr.getJSONObject(0);
 			customer = new Customer(jobj.getString("name"));
 			customer.setId(Integer.parseInt(jobj.getString("id")));
-			removeCustomer(id);
+			customer.setFines(Integer.parseInt(jobj.getString("fine")));
 		} catch (JSONException e) {e.printStackTrace();}
 		
 		
@@ -165,6 +165,7 @@ public class DatabaseSupport {
 				JSONObject jobj = jArr.getJSONObject(i);
 				aCustomer = new Customer(jobj.getString("name"));
 				aCustomer.setId(Integer.parseInt(jobj.getString("id")));
+				aCustomer.setFines(Integer.parseInt(jobj.getString("fine")));
 				customerList.add(aCustomer);
 			}
 		} catch (JSONException e) {e.printStackTrace();}
@@ -313,8 +314,6 @@ public class DatabaseSupport {
 				+ "VALUES ('"+c.getId()+"', '"+c.getCustomerId()+"', '"+c.getItem().getCode()+"', '"+c.getDueDate()+"');";
 		String result = query(query);
 		
-		System.out.println("Result:"+result);
-		
 		if (result.equals(""))
 			return true;// successful update query returns exactly nothing.
 		return false;
@@ -368,5 +367,4 @@ public class DatabaseSupport {
 		
 		return checkouts;
 	}
-
 }
