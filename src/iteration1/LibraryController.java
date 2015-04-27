@@ -10,68 +10,40 @@ public class LibraryController {
 	{
 		lib = new Library();
 	}
+	
 	public boolean payFines(int id, int fine)
 	{
-		if(lib.payFines(id, fine))
-		{
-			return true;
-		}
-		return false;
+		return lib.payFines(id, fine);
 	}
+	
 	public boolean modifyFine(String code, int fine)
 	{
-		if(lib.modifyFine(code, fine))
-		{
-			return true;
-		}
-		return false;
+		return lib.modifyFine(code, fine);
 	}
+	
 	public boolean addFines(int id, int fine)
 	{
-		if(lib.addFines(id, fine))
-		{
-			return true;
-		}
-		return false;
+		return lib.addFines(id, fine);
 	}
+	
 	public boolean addLibrarian(String user, String pass)
 	{
-		if(lib.addLibrarian(user, pass))
-		{
-			return true;
-		}
-		
-		return false;
+		return lib.addLibrarian(user, pass);
 	}
 	
 	public boolean deleteLibrarian(String user)
 	{
-		if(lib.deleteLibrarian(user))
-		{
-			return true;
-		}
-		
-		return false;
+		return lib.deleteLibrarian(user);
 	}
 	
 	public boolean addCustomer(String user)
 	{
-		if(lib.addCustomer(user))
-		{
-			return true;
-		}
-		
-		return false;
+		return lib.addCustomer(user);
 	}
 	
 	public boolean deleteCustomer(int id)
 	{
-		if(lib.deleteCustomer(id))
-		{
-			return true;
-		}
-		
-		return false;
+		return lib.deleteCustomer(id);
 	}
 	
 	public Customer viewCustomer(int id)
@@ -81,22 +53,12 @@ public class LibraryController {
 	
 	public boolean addInventoryItem(int type, String name, String code, int quantity)
 	{
-		if(lib.addInventoryItem(type, name, code, quantity))
-		{
-			return true;
-		}
-		
-		return false;
+		return lib.addInventoryItem(type, name, code, quantity);
 	}
 	
 	public boolean deleteInventoryItem(String code, int quantity)
 	{
-		if(lib.deleteInventoryItem(code, quantity))
-		{
-			return true;
-		}
-		
-		return false;
+		return lib.deleteInventoryItem(code, quantity);
 	}
 	
 	public ArrayList<Customer> viewCustomerList()
@@ -134,6 +96,14 @@ public class LibraryController {
 
 	public ArrayList<Checkout> viewCheckOutItems(){
 		return lib.viewCheckOutItems();
+	}
+	
+	public boolean increaseItemQuantity(String code, int amount){
+		return lib.increaseItemQuantity(code, amount);
+	}
+	
+	public boolean modifyDueDate(int id, String newDate){
+		return lib.modifyDueDate(id, newDate);
 	}
 	
 }

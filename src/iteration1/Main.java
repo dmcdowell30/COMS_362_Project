@@ -318,7 +318,30 @@ public class Main {
 					System.out.println("Checkout id: "+co.getId()+"\t Customer id: "+co.getCustomerId()+"\t Due: "+co.getDueDate()+"\t "+it.getTypeString()+": "+it.getName());
 				}
 			}
-			else if(in.equals("15")) //exit
+			//Increase item quantity
+			else if(in.equals("15"))
+			{
+				System.out.print("Enter Inventory item code to increase: ");
+				String code = input.nextLine();
+				
+				System.out.print("Enter amount to increase by: ");
+				String num = input.nextLine();
+				int amount = Integer.parseInt(num);
+				
+				libctrl.increaseItemQuantity(code, amount);
+			}
+			else if(in.equals("16"))
+			{
+				System.out.print("Enter checkout id to modify date: ");
+				String code = input.nextLine();
+				int id = Integer.parseInt(code);
+				
+				System.out.print("Enter new date for item: ");
+				String newDate = input.nextLine();
+				
+				libctrl.modifyDueDate(id, newDate);
+			}
+			else if(in.equals("17")) //exit
 			{
 				break;
 			}
@@ -330,7 +353,5 @@ public class Main {
 			in = input.nextLine();
 			if(!in.toLowerCase().contains("y"))break;
 		}
-		System.out.println("Have a good day! Let me know if you need some lip therapy.");
 	}
-
 }

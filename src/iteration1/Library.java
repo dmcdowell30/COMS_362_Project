@@ -141,4 +141,28 @@ public class Library {
 	public ArrayList<Checkout> viewCheckOutItems(){
 		return MyDatabaseSupport.getCheckOuts();
 	}
+	
+	public boolean increaseItemQuantity(String code, int ammount) {
+		Item toChange = MyDatabaseSupport.getItem(code);
+		
+		if(toChange == null)
+			return false;
+		
+		toChange.increaseQuantity(ammount);
+		MyDatabaseSupport.putInventoryItem(toChange);
+		
+		return true;
+	}
+	
+	public boolean modifyDueDate(int id, String newDate) {
+		Checkout toChange = MyDatabaseSupport.getCheckout(id);
+		
+		if(toChange == null)
+			return false;
+		
+		toChange.setDueDate(newDate);
+		MyDatabaseSupport.putCheckout(toChange);
+		
+		return true;
+	}
 }

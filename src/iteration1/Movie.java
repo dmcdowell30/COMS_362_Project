@@ -41,20 +41,25 @@ public class Movie implements Item{
 		return quantity;
 	}
 	@Override
-	public void setCode() {
-		// TODO Auto-generated method stub
+	public void setCode(String code) {
+		this.code = code;
 	}
 	@Override
-	public void setName() {
-		// TODO Auto-generated method stub
+	public void setName(String name) {
+		this.name = name;
 	}
 	@Override
-	public void setType() {
-		// TODO Auto-generated method stub
+	public void setType(int type) {
+		this.type = type;
 	}
 	@Override
-	public void setQuantity() {
-		// TODO Auto-generated method stub
+	public boolean increaseQuantity(int amount) {
+		if(amount < 0)
+			return false;
+		
+		this.quantity += amount;
+		this.avail += amount;
+		return true;
 	}
 	@Override
 	public int getAvail() {

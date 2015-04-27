@@ -12,10 +12,10 @@ public interface Item {
 	public String getTypeString();
 	public int getQuantity();
 	public void modifyFine(int fine);
-	public void setCode();
-	public void setName();
-	public void setType();
-	public void setQuantity();
+	public void setCode(String code);
+	public void setName(String name);
+	public void setType(int type);
+	public boolean increaseQuantity(int amount);
 	public int getAvail();
 
 }
