@@ -141,4 +141,13 @@ public class Library {
 	public ArrayList<Checkout> viewCheckOutItems(){
 		return MyDatabaseSupport.getCheckOuts();
 	}
+	public ArrayList<Item> searchByTitle(String title){
+		return MyDatabaseSupport.searchByTitle(title);
+	}
+	public ArrayList<Item> searchByType(String type){
+		return MyDatabaseSupport.searchByType(type);
+	}
+	public ArrayList<Item> searchByGenre(String genre){
+		return MyDatabaseSupport.searchByGenre(genre);
+	}
 }

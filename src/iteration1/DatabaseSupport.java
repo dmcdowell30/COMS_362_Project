@@ -318,7 +318,99 @@ public class DatabaseSupport {
 			return true;// successful update query returns exactly nothing.
 		return false;
 	}
+	
+	ArrayList<Item> searchByTitle(String title){
+		ArrayList<Item> itemList = new ArrayList<Item>();
+		
+		String query = "SELECT * FROM `items` WHERE code = '"+title+"'";
+		String result = query(query);
+		
+		if (result.equals(""))return null;// result was empty. return null object.
+		
+		try {
+			JSONArray jArr = new JSONArray(result);
+			Item anItem = null;
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				String name = jobj.getString("name");
+				int type = jobj.getInt("type");
+				String code = jobj.getString("code");
+				int quantity = jobj.getInt("quantity");
+				int avail = jobj.getInt("avail");
+				
+				if(type==Item.BOOK)			anItem = new Book(name,code,quantity, avail);
+				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity, avail);
+				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity, avail);
+				
+				itemList.add(anItem);
+			}
+		} catch (JSONException e) {return null;}
+		
+		return itemList;
+	}
+	
+	ArrayList<Item> searchByType(String term){
+		ArrayList<Item> itemList = new ArrayList<Item>();
+		
+		String query = "SELECT * FROM `items` WHERE code = '"+term+"'";
+		String result = query(query);
+		
+		if (result.equals(""))return null;// result was empty. return null object.
+		
+		try {
+			JSONArray jArr = new JSONArray(result);
+			Item anItem = null;
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				String name = jobj.getString("name");
+				int type = jobj.getInt("type");
+				String code = jobj.getString("code");
+				int quantity = jobj.getInt("quantity");
+				int avail = jobj.getInt("avail");
+				
+				if(type==Item.BOOK)			anItem = new Book(name,code,quantity, avail);
+				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity, avail);
+				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity, avail);
+				
+				itemList.add(anItem);
+			}
+		} catch (JSONException e) {return null;}
+		
+		return itemList;
+		
+	}
+	
+	ArrayList<Item> searchByGenre(String genre){
+		ArrayList<Item> itemList = new ArrayList<Item>();
+		
+		String query = "SELECT * FROM `items` WHERE code = '"+genre+"'";
 
+		String result = query(query);
+		
+		if (result.equals(""))return null;// result was empty. return null object.
+		
+		try {
+			JSONArray jArr = new JSONArray(result);
+			Item anItem = null;
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				String name = jobj.getString("name");
+				int type = jobj.getInt("type");
+				String code = jobj.getString("code");
+				int quantity = jobj.getInt("quantity");
+				int avail = jobj.getInt("avail");
+				
+				if(type==Item.BOOK)			anItem = new Book(name,code,quantity, avail);
+				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity, avail);
+				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity, avail);
+				
+				itemList.add(anItem);
+			}
+		} catch (JSONException e) {return null;}
+		
+		return itemList;
+		
+	}
 	public boolean returnCheckout(int id){
 
 		// determine if the checkout exists.
@@ -343,12 +435,15 @@ public class DatabaseSupport {
 		ArrayList<Checkout> checkouts = new ArrayList<Checkout>();
 		
 		String query = "SELECT * FROM `checkouts`";
+
 		String result = query(query);
 		
 		if (result.equals(""))return null;// result was empty. return null object.
 		
 		try {
 			JSONArray jArr = new JSONArray(result);
+			Item anItem = null;
+	
 			Checkout c = null;
 			for(int i=0 ; i<jArr.length(); i++){
 				JSONObject jobj = jArr.getJSONObject(i);
@@ -367,4 +462,5 @@ public class DatabaseSupport {
 		
 		return checkouts;
 	}
+
 }
