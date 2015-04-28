@@ -27,7 +27,10 @@ public class Main {
 			System.out.println("12) Return Checkout");
 			System.out.println("13) Renew Checkout");
 			System.out.println("14) View all Checkouts");
-			System.out.println("15) Exit");
+			System.out.println("15) Increase Item Quantity");
+			System.out.println("16) Modify Item Due Date");
+			System.out.println("17) Search Item By Term");
+			System.out.println("18) Exit");
 			
 			System.out.print("Choice: ");
 			String in = input.nextLine();
@@ -341,7 +344,33 @@ public class Main {
 				
 				libctrl.modifyDueDate(id, newDate);
 			}
-			else if(in.equals("17")) //exit
+			else if(in.equals("17")){
+				System.out.print("What do you want to search by?: ");
+				System.out.print("1: Search By Title");
+				System.out.print("1: Search By Type");
+				System.out.print("1: Search By Genre");
+				String code = input.nextLine();
+				int choice = Integer.parseInt(code);
+				ArrayList<Item> itemList = new ArrayList<Item>();
+				System.out.println("Enter Search Term: ");
+				String searchTerm = input.nextLine();
+				if(choice == 1){
+					itemList = libctrl.searchByTitle(searchTerm);
+				}
+				else if(choice == 2){
+					itemList = libctrl.searchByType(searchTerm);
+				}
+				else if(choice == 3){
+					itemList = libctrl.searchByGenre(searchTerm);
+				}
+				for(int i = 0; i < itemList.size(); i++){
+					Item item = itemList.get(i);
+					System.out.println(item.getName() + ", " + item.getType() + ", " + item.getGenre());
+				}
+
+
+			}
+			else if(in.equals("18")) //exit
 			{
 				break;
 			}

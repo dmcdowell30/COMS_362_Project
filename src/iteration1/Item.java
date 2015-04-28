@@ -17,5 +17,6 @@ public interface Item {
 	public void setType(int type);
 	public boolean increaseQuantity(int amount);
 	public int getAvail();
+	public String getGenre();
 
 }

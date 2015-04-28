@@ -8,6 +8,7 @@ public class Book implements Item{
 	private int quantity;
 	private int fine;
 	private int avail;
+	private String genre;
 	
 	public Book(String name, String code, int quantity, int avail){
 		this.code = code;
@@ -73,5 +74,12 @@ public class Book implements Item{
 	}
 	public void setFine(int fine) {
 		this.fine = fine;
+	}
+	@Override
+	public String getGenre() {
+		return genre;
+	}
+	public void setGenre(String genre){
+		this.genre = genre;
 	}
 }
