@@ -73,6 +73,9 @@ public class Main {
 					System.out.print("Enter item name: ");
 					String name = input.nextLine();
 					
+					System.out.print("Enter item genre: ");
+					String genre = input.nextLine();
+					
 					System.out.print("Enter item code: ");
 					String code = input.nextLine();
 
@@ -80,7 +83,7 @@ public class Main {
 					String quan = input.nextLine();
 					int quantity = Integer.parseInt(quan);
 					
-					success = libctrl.addInventoryItem(type, name, code, quantity);
+					success = libctrl.addInventoryItem(type, name, genre, code, quantity);
 				}
 				else
 				{
@@ -384,13 +387,28 @@ public class Main {
 		if(inventory.getInventory().size()==0){
 			System.out.println("No Items to Display");
 		}
-		for(Item item:inventory.getInventory()){
-			String title = "\""+item.getName()+"\"";
-			while(title.length()<25)title = title+" ";
-			String code = ""+item.getCode();
-			while(code.length()<15)code = code+" ";
-			System.out.println(item.getTypeString()+":\t"+title+"\t code:"+code+
-					"\t stock/avail: "+item.getQuantity()+"/"+item.getAvail());
+		else {
+			String title = padString("Title",25);
+			String genre = padString("Genre", 20);
+			String code = padString("Item Code",15);
+			
+			
+			System.out.println("Type"+"\t"+title+"\t"+genre+"\t"+code+"     Avail/Stock");
+			System.out.println("------------------------------------------------------------------------------------------------");
 		}
+		for(Item item:inventory.getInventory()){
+
+			String title = padString("\""+item.getName()+"\"",25);
+			String genre = padString(item.getGenre(), 20);
+			String code = padString(item.getCode(),15);
+			
+			
+			System.out.println(item.getTypeString()+"\t"+title+"\t"+genre+"\t"+code+
+					"\t\t"+item.getAvail()+"/"+item.getQuantity());
+		}
+	}
+	private static String padString(String input, int fixedLength){
+		while(input.length()<fixedLength)input=input+" ";
+		return input;
 	}
 }

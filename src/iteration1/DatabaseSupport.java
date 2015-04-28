@@ -75,6 +75,26 @@ public class DatabaseSupport {
 		return items;
 	}
 	
+	private Item assembleItem(JSONObject jobj){
+		Item item = null;
+		
+		try{
+		String name = jobj.getString("name");
+		int type = jobj.getInt("type");
+		String genre = jobj.getString("genre");
+		String code = jobj.getString("code");
+		int quantity = jobj.getInt("quantity");
+		int avail = jobj.getInt("avail");
+		
+		if(type==Item.BOOK)			item = new Book(name, genre, code,quantity, avail);
+		else if(type==Item.MOVIE)	item = new Movie(name,genre, code,quantity, avail);
+		else if(type==Item.MUSIC)	item = new Music(name,genre, code,quantity, avail);
+		
+		return item;
+		}catch(Exception e){}
+		return item;
+	}
+	
 	/////////////////////////////////////
 	////// Below are from Class Diagram 
 	/////////////////////////////////////
@@ -204,20 +224,9 @@ public class DatabaseSupport {
 		
 		try {
 			JSONArray jArr = new JSONArray(result);
-			Item anItem = null;
 			for(int i=0 ; i<jArr.length(); i++){
 				JSONObject jobj = jArr.getJSONObject(i);
-				String name = jobj.getString("name");
-				int type = jobj.getInt("type");
-				String code = jobj.getString("code");
-				int quantity = jobj.getInt("quantity");
-				int avail = jobj.getInt("avail");
-				
-				if(type==Item.BOOK)			anItem = new Book(name,code,quantity, avail);
-				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity, avail);
-				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity, avail);
-				
-				itemList.add(anItem);
+				itemList.add(assembleItem(jobj));
 			}
 		} catch (JSONException e) {return null;}
 		sortItemsByName(itemList);
@@ -234,24 +243,10 @@ public class DatabaseSupport {
 		
 		try {
 			JSONArray jArr = new JSONArray(result);
-			Item anItem = null;
-			for(int i=0 ; i<jArr.length(); i++){
-				JSONObject jobj = jArr.getJSONObject(i);
-				String name = jobj.getString("name");
-				int type = jobj.getInt("type");
-				String code = jobj.getString("code");
-				int quantity = jobj.getInt("quantity");
-				int avail = jobj.getInt("avail");
+			JSONObject jobj = jArr.getJSONObject(0);
 				
-				if(type==Item.BOOK)			anItem = new Book(name,code,quantity, avail);
-				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity, avail);
-				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity, avail);
-				
-				return anItem;
-			}
+			return assembleItem(jobj);
 		} catch (JSONException e) {return null;}
-		
-		return null;
 	}
 	
 	boolean putInventoryItem(Item i){
@@ -264,8 +259,8 @@ public class DatabaseSupport {
 			result = query(query);
 		}
 		
-		query = "INSERT INTO `items` (`id`, `name`, `type`, `code`, `quantity`, `avail`) "
-				+ "VALUES (NULL, '"+i.getName()+"', '"+i.getType()+"', '"+i.getCode()+"', "+i.getQuantity()+", "+i.getAvail()+")";
+		query = "INSERT INTO `items` (`id`, `name`, `type`, `genre`, `code`, `quantity`, `avail`) "
+				+ "VALUES (NULL, '"+i.getName()+"', '"+i.getType()+"', '"+i.getGenre()+"', '"+i.getCode()+"', "+i.getQuantity()+", "+i.getAvail()+")";
 		result = query(query);
 		
 		System.out.println(result);
@@ -286,7 +281,6 @@ public class DatabaseSupport {
 		int avail = 0;
 		try {
 			JSONArray jArr = new JSONArray(result);
-			Item anItem = null;
 			for(int i=0 ; i<jArr.length(); i++){
 				JSONObject jobj = jArr.getJSONObject(i);
 				quantity = jobj.getInt("quantity");
@@ -370,8 +364,6 @@ public class DatabaseSupport {
 		
 		try {
 			JSONArray jArr = new JSONArray(result);
-			Item anItem = null;
-	
 			Checkout c = null;
 			for(int i=0 ; i<jArr.length(); i++){
 				JSONObject jobj = jArr.getJSONObject(i);
@@ -401,20 +393,9 @@ public class DatabaseSupport {
 		
 		try {
 			JSONArray jArr = new JSONArray(result);
-			Item anItem = null;
 			for(int i=0 ; i<jArr.length(); i++){
 				JSONObject jobj = jArr.getJSONObject(i);
-				String name = jobj.getString("name");
-				int type = jobj.getInt("type");
-				String code = jobj.getString("code");
-				int quantity = jobj.getInt("quantity");
-				int avail = jobj.getInt("avail");
-				
-				if(type==Item.BOOK)			anItem = new Book(name,code,quantity, avail);
-				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity, avail);
-				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity, avail);
-				
-				itemList.add(anItem);
+				itemList.add(assembleItem(jobj));
 			}
 		} catch (JSONException e) {return null;}
 		
@@ -431,20 +412,9 @@ public class DatabaseSupport {
 		
 		try {
 			JSONArray jArr = new JSONArray(result);
-			Item anItem = null;
 			for(int i=0 ; i<jArr.length(); i++){
 				JSONObject jobj = jArr.getJSONObject(i);
-				String name = jobj.getString("name");
-				int type = jobj.getInt("type");
-				String code = jobj.getString("code");
-				int quantity = jobj.getInt("quantity");
-				int avail = jobj.getInt("avail");
-				
-				if(type==Item.BOOK)			anItem = new Book(name,code,quantity, avail);
-				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity, avail);
-				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity, avail);
-				
-				itemList.add(anItem);
+				itemList.add(assembleItem(jobj));
 			}
 		} catch (JSONException e) {return null;}
 		
@@ -452,6 +422,7 @@ public class DatabaseSupport {
 	}
 	
 	ArrayList<Item> searchByGenre(String genre){
+		//TODO add genre to database and 
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		
 		String query = "SELECT * FROM `items` WHERE genre = '"+genre+"'";
@@ -462,25 +433,12 @@ public class DatabaseSupport {
 		
 		try {
 			JSONArray jArr = new JSONArray(result);
-			Item anItem = null;
 			for(int i=0 ; i<jArr.length(); i++){
 				JSONObject jobj = jArr.getJSONObject(i);
-				String name = jobj.getString("name");
-				int type = jobj.getInt("type");
-				String code = jobj.getString("code");
-				int quantity = jobj.getInt("quantity");
-				int avail = jobj.getInt("avail");
-				
-				if(type==Item.BOOK)			anItem = new Book(name,code,quantity, avail);
-				else if(type==Item.MOVIE)	anItem = new Movie(name,code,quantity, avail);
-				else if(type==Item.MUSIC)	anItem = new Music(name,code,quantity, avail);
-				
-				itemList.add(anItem);
+				itemList.add(assembleItem(jobj));
 			}
 		} catch (JSONException e) {return null;}
 		
 		return itemList;
 	}
-	
-
 }

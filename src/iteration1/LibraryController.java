@@ -51,9 +51,9 @@ public class LibraryController {
 		return lib.viewCustomer(id);
 	}
 	
-	public boolean addInventoryItem(int type, String name, String code, int quantity)
+	public boolean addInventoryItem(int type, String name, String genre, String code, int quantity)
 	{
-		return lib.addInventoryItem(type, name, code, quantity);
+		return lib.addInventoryItem(type, name, genre, code, quantity);
 	}
 	
 	public boolean deleteInventoryItem(String code, int quantity)

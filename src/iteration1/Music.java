@@ -10,9 +10,10 @@ public class Music implements Item{
 	private int avail;
 	private String genre;
 	
-	public Music(String name, String code, int quantity, int avail){
+	public Music(String name, String genre, String code, int quantity, int avail){
 		this.code = code;
 		this.name = name;
+		this.genre = genre;
 		this.quantity = quantity;
 		this.avail = avail;
 	}

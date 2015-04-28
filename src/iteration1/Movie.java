@@ -11,9 +11,10 @@ public class Movie implements Item{
 	private int avail;
 	private String genre;
 	
-	public Movie(String name, String code, int quantity, int avail){
+	public Movie(String name, String genre, String code, int quantity, int avail){
 		this.code = code;
 		this.name = name;
+		this.genre = genre;
 		this.quantity = quantity;
 		this.avail = avail;
 	}

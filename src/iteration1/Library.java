@@ -41,17 +41,17 @@ public class Library {
 	public boolean deleteInventoryItem(String code, int quantity){
 		return MyDatabaseSupport.removeInventoryItem(code, quantity);
 	}
-	public boolean addInventoryItem(int type, String name, String code, int quantity){
+	public boolean addInventoryItem(int type, String name, String genre, String code, int quantity){
 		Item newItem;
 		if(type == Item.BOOK){
-			newItem = new Book(name, code, quantity, quantity);
+			newItem = new Book(name, genre, code, quantity, quantity);
 		}
 		else if(type == Item.MOVIE){
-			newItem = new Movie(name, code, quantity, quantity);
+			newItem = new Movie(name, genre, code, quantity, quantity);
 
 		}
 		else if(type == Item.MUSIC){
-			newItem = new Music(name, code, quantity, quantity);
+			newItem = new Music(name, genre, code, quantity, quantity);
 		}
 		else{
 			return false;
