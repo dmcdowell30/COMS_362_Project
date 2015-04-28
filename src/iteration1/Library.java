@@ -141,6 +141,7 @@ public class Library {
 	public ArrayList<Checkout> viewCheckOutItems(){
 		return MyDatabaseSupport.getCheckOuts();
 	}
+<<<<<<< HEAD
 	
 	public boolean increaseItemQuantity(String code, int ammount) {
 		Item toChange = MyDatabaseSupport.getItem(code);
@@ -164,5 +165,15 @@ public class Library {
 		MyDatabaseSupport.putCheckout(toChange);
 		
 		return true;
+=======
+	public ArrayList<Item> searchByTitle(String title){
+		return MyDatabaseSupport.searchByTitle(title);
+	}
+	public ArrayList<Item> searchByType(String type){
+		return MyDatabaseSupport.searchByType(type);
+	}
+	public ArrayList<Item> searchByGenre(String genre){
+		return MyDatabaseSupport.searchByGenre(genre);
+>>>>>>> dff4f274fa940f450be270bcc2f65c734851a35d
 	}
 }
