@@ -8,6 +8,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,6 +57,23 @@ public class DatabaseSupport {
 		return result;
 	}
 	
+	private ArrayList<Item> sortItemsByName(ArrayList<Item> items){
+		
+		Collections.sort(items, new Comparator<Item>() {
+
+			@Override
+			public int compare(Item lhs, Item rhs) {
+                int count = 0;
+				if (lhs.getName().compareTo(rhs.getName()) > 0)
+					return 1;
+				else if (lhs.getName().compareTo(rhs.getName()) < 0)
+					return -1;
+				return 0;
+			}
+		});
+		
+		return items;
+	}
 	
 	/////////////////////////////////////
 	////// Below are from Class Diagram 
@@ -201,7 +220,7 @@ public class DatabaseSupport {
 				itemList.add(anItem);
 			}
 		} catch (JSONException e) {return null;}
-		
+		sortItemsByName(itemList);
 		inventory.setItemList(itemList);
 		return inventory;
 	}
@@ -240,13 +259,16 @@ public class DatabaseSupport {
 		String query = "SELECT * FROM `items` WHERE code = '"+ i.getCode() + "'";
 		String result = query(query);
 
-		if (!result.equals(""))
-			return false;// result wasn't empty. Item with same code already exists.
+		if (!result.equals("")){
+			query = "DELETE FROM `items` WHERE code = '"+i.getCode()+"'";
+			result = query(query);
+		}
 		
 		query = "INSERT INTO `items` (`id`, `name`, `type`, `code`, `quantity`, `avail`) "
-				+ "VALUES (NULL, '"+i.getName()+"', '"+i.getType()+"', '"+i.getCode()+"', '"+i.getQuantity()+"', '"+i.getAvail()+"')";
+				+ "VALUES (NULL, '"+i.getName()+"', '"+i.getType()+"', '"+i.getCode()+"', "+i.getQuantity()+", "+i.getAvail()+")";
 		result = query(query);
 		
+		System.out.println(result);
 		if(result.equals(""))return true;
 		
 		return false;
@@ -319,10 +341,60 @@ public class DatabaseSupport {
 		return false;
 	}
 	
+	public boolean returnCheckout(int id){
+
+		// determine if the checkout exists.
+		String query = "SELECT * FROM `checkouts` WHERE id = '"+id+"'";
+		String result = query(query);
+						
+		if(result.equals("")){
+			System.out.println("Checkout does not exist...");
+			return false;
+		}
+				
+		query = "DELETE FROM `arlenb_coms362db`.`checkouts` WHERE `checkouts`.`id` = '"+id+"'";
+		result = query(query);
+				
+		if(result.equals(""))return true;
+		
+		return false;
+	}
+
+	public ArrayList<Checkout> getCheckOuts(){
+		
+		ArrayList<Checkout> checkouts = new ArrayList<Checkout>();
+		String query = "SELECT * FROM `checkouts`";
+		String result = query(query);
+		
+		if (result.equals(""))return null;// result was empty. return null object.
+		
+		try {
+			JSONArray jArr = new JSONArray(result);
+			Item anItem = null;
+	
+			Checkout c = null;
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				int id = jobj.getInt("id");
+				int custId = jobj.getInt("cust_id");
+				String code = jobj.getString("item_code");
+				String date = jobj.getString("date_due");
+				
+				Item item = getItem(code);
+				c = new Checkout(custId, item);
+				c.setId(id);
+				c.setDueDate(date);
+				checkouts.add(c);
+			}
+		} catch (JSONException e) {return null;}
+		
+		return checkouts;
+	}
+	
 	ArrayList<Item> searchByTitle(String title){
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		
-		String query = "SELECT * FROM `items` WHERE code = '"+title+"'";
+		String query = "SELECT * FROM `items` WHERE name LIKE '%"+title+"%'";
 		String result = query(query);
 		
 		if (result.equals(""))return null;// result was empty. return null object.
@@ -352,7 +424,7 @@ public class DatabaseSupport {
 	ArrayList<Item> searchByType(int term){
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		
-		String query = "SELECT * FROM `items` WHERE code = '"+term+"'";
+		String query = "SELECT * FROM `items` WHERE type = "+term+"";
 		String result = query(query);
 		
 		if (result.equals(""))return null;// result was empty. return null object.
@@ -377,13 +449,12 @@ public class DatabaseSupport {
 		} catch (JSONException e) {return null;}
 		
 		return itemList;
-		
 	}
 	
 	ArrayList<Item> searchByGenre(String genre){
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		
-		String query = "SELECT * FROM `items` WHERE code = '"+genre+"'";
+		String query = "SELECT * FROM `items` WHERE genre = '"+genre+"'";
 
 		String result = query(query);
 		
@@ -409,58 +480,7 @@ public class DatabaseSupport {
 		} catch (JSONException e) {return null;}
 		
 		return itemList;
-		
 	}
-	public boolean returnCheckout(int id){
-
-		// determine if the checkout exists.
-		String query = "SELECT * FROM `checkouts` WHERE id = '"+id+"'";
-		String result = query(query);
-						
-		if(result.equals("")){
-			System.out.println("Checkout does not exist...");
-			return false;
-		}
-				
-		query = "DELETE FROM `arlenb_coms362db`.`checkouts` WHERE `checkouts`.`id` = '"+id+"'";
-		result = query(query);
-				
-		if(result.equals(""))return true;
-		
-		return false;
-	}
-
-	public ArrayList<Checkout> getCheckOuts(){
-		
-		ArrayList<Checkout> checkouts = new ArrayList<Checkout>();
-		
-		String query = "SELECT * FROM `checkouts`";
-
-		String result = query(query);
-		
-		if (result.equals(""))return null;// result was empty. return null object.
-		
-		try {
-			JSONArray jArr = new JSONArray(result);
-			Item anItem = null;
 	
-			Checkout c = null;
-			for(int i=0 ; i<jArr.length(); i++){
-				JSONObject jobj = jArr.getJSONObject(i);
-				int id = jobj.getInt("id");
-				int custId = jobj.getInt("cust_id");
-				String code = jobj.getString("item_code");
-				String date = jobj.getString("date_due");
-				
-				Item item = getItem(code);
-				c = new Checkout(custId, item);
-				c.setId(id);
-				c.setDueDate(date);
-				checkouts.add(c);
-			}
-		} catch (JSONException e) {return null;}
-		
-		return checkouts;
-	}
 
 }

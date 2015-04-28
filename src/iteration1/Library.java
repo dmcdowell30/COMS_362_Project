@@ -149,9 +149,8 @@ public class Library {
 			return false;
 		
 		toChange.increaseQuantity(ammount);
-		MyDatabaseSupport.putInventoryItem(toChange);
 		
-		return true;
+		return MyDatabaseSupport.putInventoryItem(toChange);
 	}
 	
 	public boolean modifyDueDate(int id, String newDate) {

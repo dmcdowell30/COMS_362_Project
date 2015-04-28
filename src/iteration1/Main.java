@@ -162,14 +162,7 @@ public class Main {
 			{
 				Inventory inventory = libctrl.viewInventory();
 				
-				for(Item item:inventory.getInventory()){
-					String title = "\""+item.getName()+"\"";
-					while(title.length()<25)title = title+" ";
-					String code = ""+item.getCode();
-					while(code.length()<15)code = code+" ";
-					System.out.println(item.getTypeString()+":\t"+title+"\t code:"+code+
-							"\t stock/avail: "+item.getQuantity()+"/"+item.getAvail());
-				}
+				printItems(inventory);
 			}
 			//pay fines
 			else if(in.equals("6"))
@@ -331,7 +324,9 @@ public class Main {
 				String num = input.nextLine();
 				int amount = Integer.parseInt(num);
 				
-				libctrl.increaseItemQuantity(code, amount);
+				if(libctrl.increaseItemQuantity(code, amount))
+					System.out.println("Increase Amount Success");
+				else System.out.println("Operation Failure...");
 			}
 			else if(in.equals("16"))
 			{
@@ -346,39 +341,30 @@ public class Main {
 			}
 			else if(in.equals("17")){
 				System.out.print("What do you want to search by?: ");
-				System.out.print("1: Search By Title");
-				System.out.print("\n2: Search By Type");
-				System.out.print("\n3: Search By Genre");
+				System.out.print("\n1: Search By Title");
+				System.out.print("\n2: Search By Type (0:Book, 1:Movie, 2:Music)");
+				System.out.print("\n3: Search By Genre\nChoice: ");
 				String code = input.nextLine();
 				int choice = Integer.parseInt(code);
 				ArrayList<Item> itemList = new ArrayList<Item>();
 				System.out.println("Enter Search Term: ");
-			
+				String searchTerm = input.nextLine();
 
 				if(choice == 1){
-					String searchTerm = input.nextLine();
+					
 					itemList = libctrl.searchByTitle(searchTerm);
 				}
 				else if(choice == 2){
-					String searchTerm = input.nextLine();
 					int type = Integer.parseInt(searchTerm);
 					itemList = libctrl.searchByType(type);
 				}
 				else if(choice == 3){
-					String searchTerm = input.nextLine();
 					itemList = libctrl.searchByGenre(searchTerm);
 				}
-				if(itemList == null){
-					System.out.println("No results found");
-				}
-				else{
-					for(int i = 0; i < itemList.size() - 1; i++){
-				
-					Item item = itemList.get(i);
-					System.out.println(item.getName() + ", " + item.getType() + ", " + item.getGenre());
-				}
-				}
 
+				Inventory inv = new Inventory();
+				inv.setItemList(itemList);
+				printItems(inv);
 			}
 			else if(in.equals("18")) //exit
 			{
@@ -391,6 +377,20 @@ public class Main {
 			System.out.print("Continue? (y/n) ");
 			in = input.nextLine();
 			if(!in.toLowerCase().contains("y"))break;
+		}
+	}
+	private static void printItems(Inventory inventory){
+
+		if(inventory.getInventory().size()==0){
+			System.out.println("No Items to Display");
+		}
+		for(Item item:inventory.getInventory()){
+			String title = "\""+item.getName()+"\"";
+			while(title.length()<25)title = title+" ";
+			String code = ""+item.getCode();
+			while(code.length()<15)code = code+" ";
+			System.out.println(item.getTypeString()+":\t"+title+"\t code:"+code+
+					"\t stock/avail: "+item.getQuantity()+"/"+item.getAvail());
 		}
 	}
 }
