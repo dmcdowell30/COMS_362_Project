@@ -349,7 +349,7 @@ public class DatabaseSupport {
 		return itemList;
 	}
 	
-	ArrayList<Item> searchByType(String term){
+	ArrayList<Item> searchByType(int term){
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		
 		String query = "SELECT * FROM `items` WHERE code = '"+term+"'";

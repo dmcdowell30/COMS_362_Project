@@ -109,7 +109,7 @@ public class LibraryController {
 	public ArrayList<Item> searchByTitle(String title){
 		return lib.searchByTitle(title);
 	}
-	public ArrayList<Item> searchByType(String type){
+	public ArrayList<Item> searchByType(int type){
 		return lib.searchByType(type);
 	}
 	public ArrayList<Item> searchByGenre(String genre){

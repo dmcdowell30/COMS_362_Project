@@ -169,7 +169,7 @@ public class Library {
 	public ArrayList<Item> searchByTitle(String title){
 		return MyDatabaseSupport.searchByTitle(title);
 	}
-	public ArrayList<Item> searchByType(String type){
+	public ArrayList<Item> searchByType(int type){
 		return MyDatabaseSupport.searchByType(type);
 	}
 	public ArrayList<Item> searchByGenre(String genre){

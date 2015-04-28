@@ -347,27 +347,37 @@ public class Main {
 			else if(in.equals("17")){
 				System.out.print("What do you want to search by?: ");
 				System.out.print("1: Search By Title");
-				System.out.print("1: Search By Type");
-				System.out.print("1: Search By Genre");
+				System.out.print("\n2: Search By Type");
+				System.out.print("\n3: Search By Genre");
 				String code = input.nextLine();
 				int choice = Integer.parseInt(code);
 				ArrayList<Item> itemList = new ArrayList<Item>();
 				System.out.println("Enter Search Term: ");
-				String searchTerm = input.nextLine();
+			
+
 				if(choice == 1){
+					String searchTerm = input.nextLine();
 					itemList = libctrl.searchByTitle(searchTerm);
 				}
 				else if(choice == 2){
-					itemList = libctrl.searchByType(searchTerm);
+					String searchTerm = input.nextLine();
+					int type = Integer.parseInt(searchTerm);
+					itemList = libctrl.searchByType(type);
 				}
 				else if(choice == 3){
+					String searchTerm = input.nextLine();
 					itemList = libctrl.searchByGenre(searchTerm);
 				}
-				for(int i = 0; i < itemList.size(); i++){
+				if(itemList == null){
+					System.out.println("No results found");
+				}
+				else{
+					for(int i = 0; i < itemList.size() - 1; i++){
+				
 					Item item = itemList.get(i);
 					System.out.println(item.getName() + ", " + item.getType() + ", " + item.getGenre());
 				}
-
+				}
 
 			}
 			else if(in.equals("18")) //exit
