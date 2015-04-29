@@ -21,7 +21,7 @@ public class DatabaseSupport {
 	
 	
 	private String query(String command){
-		//System.out.println("Query: "+command);//TODO debug
+		//System.out.println("Query: "+command);//debug
 		String result = "";
 		String charset = "UTF-8";
 		String url = "http://databasesupport.arlenburroughs.com/db_query2.php";
@@ -260,7 +260,8 @@ public class DatabaseSupport {
 		}
 		
 		query = "INSERT INTO `items` (`id`, `name`, `type`, `genre`, `code`, `quantity`, `avail`) "
-				+ "VALUES (NULL, '"+i.getName()+"', '"+i.getType()+"', '"+i.getGenre()+"', '"+i.getCode()+"', "+i.getQuantity()+", "+i.getAvail()+")";
+				+ "VALUES (NULL, '"+i.getName()+"', '"+i.getType()+"', '"+i.getGenre()+"', '"+
+				i.getCode()+"', "+i.getQuantity()+", "+i.getAvail()+")";
 		result = query(query);
 		
 		System.out.println(result);
@@ -289,7 +290,8 @@ public class DatabaseSupport {
 		} catch (JSONException e) {return false;}
 		if(avail-toRemove <0)return false;
 
-		query = "UPDATE `items` SET `quantity` = '"+(quantity-toRemove)+"', `avail` = '"+(avail-toRemove)+"' WHERE `code` = "+code;
+		query = "UPDATE `items` SET `quantity` = '"+(quantity-toRemove)+"', `avail` = '"+
+				(avail-toRemove)+"' WHERE `code` = "+code;
 		result = query(query);
 
 		if (result.equals(""))
@@ -326,8 +328,10 @@ public class DatabaseSupport {
 	}
 
 	public boolean putCheckout(Checkout c){
-		String query = "INSERT INTO `arlenb_coms362db`.`checkouts` (`id`, `cust_id`, `item_code`, `date_due`) "
-				+ "VALUES ('"+c.getId()+"', '"+c.getCustomerId()+"', '"+c.getItem().getCode()+"', '"+c.getDueDate()+"');";
+		String query = "INSERT INTO `arlenb_coms362db`.`checkouts` "+
+				"(`id`, `cust_id`, `item_code`, `date_due`) VALUES ('"+
+				c.getId()+"', '"+c.getCustomerId()+"', '"+
+				c.getItem().getCode()+"', '"+c.getDueDate()+"');";
 		String result = query(query);
 		
 		if (result.equals(""))
@@ -440,5 +444,56 @@ public class DatabaseSupport {
 		} catch (JSONException e) {return null;}
 		
 		return itemList;
+	}
+
+	public ArrayList<Review> viewReviews(String itemCode) {
+		ArrayList<Review> reviewList = new ArrayList<Review>();
+		
+		String query = "SELECT * FROM `reviews` WHERE item_code = '"+itemCode+"'";
+		String result = query(query);
+		
+		if (result.equals(""))return null;// result was empty. return null object.
+		
+		try {
+			JSONArray jArr = new JSONArray(result);
+			for(int i=0 ; i<jArr.length(); i++){
+				JSONObject jobj = jArr.getJSONObject(i);
+				Review review = new Review(
+						jobj.getInt("id"), jobj.getString("item_code"), jobj.getString("review"));
+				reviewList.add(review);
+			}
+		} catch (JSONException e) {return null;}
+		
+		return reviewList;
+	}
+
+	public boolean addReview(String itemCode, String review) {
+		
+		String query = "SELECT * FROM `reviews` WHERE item_code = '"+itemCode+"'";
+		String result = query(query);
+		
+		if (result.equals(""))return false;
+		
+		query = "INSERT INTO `reviews` (`id`, `item_code`, `review`) "
+				+ "VALUES (NULL, '"+itemCode+"', '"+review+"');";
+		result = query(query);
+		
+		if(result.equals(""))return true;//successful insert query returns exactly nothing.
+		
+		return true;
+	}
+
+	public boolean deleteReview(String id) {
+		
+		String query = "SELECT * FROM `reviews` WHERE id = "+id+"";
+		String result = query(query);
+		
+		if (result.equals(""))return false;
+		
+		query = "DELETE FROM `reviews` WHERE id = "+id+"";
+		result = query(query);
+		if (result.equals(""))return true;// result was empty. return null object.
+		
+		return false;
 	}
 }

@@ -174,4 +174,13 @@ public class Library {
 	public ArrayList<Item> searchByGenre(String genre){
 		return MyDatabaseSupport.searchByGenre(genre);
 	}
+	public ArrayList<Review> viewReviews(String itemCode) {
+		return MyDatabaseSupport.viewReviews(itemCode);
+	}
+	public boolean addReview(String itemCode, String review) {
+		return MyDatabaseSupport.addReview(itemCode, review);
+	}
+	public boolean deleteReview(String id) {
+		return MyDatabaseSupport.deleteReview(id);
+	}
 }

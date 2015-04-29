@@ -30,7 +30,8 @@ public class Main {
 			System.out.println("15) Increase Item Quantity");
 			System.out.println("16) Modify Item Due Date");
 			System.out.println("17) Search Item By Term");
-			System.out.println("18) Exit");
+			System.out.println("18) Reviews");
+			System.out.println("19) Exit");
 			
 			System.out.print("Choice: ");
 			String in = input.nextLine();
@@ -369,7 +370,48 @@ public class Main {
 				inv.setItemList(itemList);
 				printItems(inv);
 			}
-			else if(in.equals("18")) //exit
+			else if(in.equals("18")){
+				System.out.print("Which would you like to do?: ");
+				System.out.print("\n1: View Reviews");
+				System.out.print("\n2: Add a Review");
+				System.out.print("\n3: Delete a Review\nChoice: ");
+				String code = input.nextLine();
+				int choice = Integer.parseInt(code);
+
+				if(choice == 1){
+					System.out.println("Enter Item Code to fetch reviews for: ");
+					String itemCode = input.nextLine();
+					ArrayList<Review> reviews = new ArrayList<Review>();
+					reviews = libctrl.viewReviews(itemCode);
+					if(reviews==null)System.out.println("No reviews found.");
+					else{
+						System.out.println("Reviews for item "+itemCode+":");
+						System.out.println("\nid\tReview\n--------------------------------");
+						for(Review aReview: reviews){
+							System.out.println(aReview.id+"\t"+aReview.review);
+						}
+					}
+				}
+				else{
+					success = false;
+					if(choice == 2){
+						System.out.print("Enter Item Code to add review for: ");
+						String itemCode = input.nextLine();
+						System.out.println("Enter Your Review: ");
+						String review = input.nextLine();
+						success = libctrl.addReview(itemCode, review);
+					}
+					else if(choice == 3){
+						System.out.print("Enter review id to delete: ");
+						String reviewID = input.nextLine();
+						success = libctrl.deleteReview(reviewID);
+					}
+					if(success)System.out.println("Review Operation Succes");
+					else System.out.println("Operation Failure");
+					
+				}
+			}
+			else if(in.equals("19")) //exit
 			{
 				break;
 			}
@@ -377,9 +419,8 @@ public class Main {
 			{
 				System.out.println("Please enter correct input.");
 			}
-			System.out.print("Continue? (y/n) ");
+			System.out.print("\nPress a key to continue...");
 			in = input.nextLine();
-			if(!in.toLowerCase().contains("y"))break;
 		}
 	}
 	private static void printItems(Inventory inventory){

@@ -115,5 +115,17 @@ public class LibraryController {
 	public ArrayList<Item> searchByGenre(String genre){
 		return lib.searchByGenre(genre);
 	}
+
+	public ArrayList<Review> viewReviews(String itemCode) {
+		return lib.viewReviews(itemCode);
+	}
+
+	public boolean addReview(String itemCode, String review) {
+		return lib.addReview(itemCode, review);
+	}
+
+	public boolean deleteReview(String id) {
+		return lib.deleteReview(id);
+	}
 	
 }
