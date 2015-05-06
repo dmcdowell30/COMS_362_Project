@@ -1,4 +1,4 @@
-package iteration1;
+package iteration3;
 
 public interface Item {
 
@@ -17,6 +17,7 @@ public interface Item {
 	public void setType(int type);
 	public boolean increaseQuantity(int amount);
 	public int getAvail();
+	public void setAvail(int nowAvail);
 	public String getGenre();
 
 }

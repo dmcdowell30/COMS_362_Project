@@ -1,4 +1,4 @@
-package iteration1;
+package iteration3;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -64,9 +64,9 @@ public class DatabaseSupport {
 			@Override
 			public int compare(Item lhs, Item rhs) {
                 int count = 0;
-				if (lhs.getName().compareTo(rhs.getName()) > 0)
+				if ((lhs.getTypeString()+lhs.getName()).compareTo(rhs.getTypeString()+rhs.getName()) > 0)
 					return 1;
-				else if (lhs.getName().compareTo(rhs.getName()) < 0)
+				else if ((lhs.getTypeString()+lhs.getName()).compareTo(rhs.getTypeString()+rhs.getName()) < 0)
 					return -1;
 				return 0;
 			}
@@ -320,40 +320,47 @@ public class DatabaseSupport {
 			c.setId(idBack);
 			c.setDueDate(date);
 			
-			returnCheckout(idBack);
-			
 		} catch (JSONException e) {return null;}
 		
 		return c;
 	}
 
 	public boolean putCheckout(Checkout c){
-		String query = "INSERT INTO `arlenb_coms362db`.`checkouts` "+
+		
+		String query = "DELETE FROM `arlenb_coms362db`.`checkouts` WHERE `checkouts`.`id` = '"+c.getId()+"'";
+		String result = query(query);
+		
+		query = "INSERT INTO `arlenb_coms362db`.`checkouts` "+
 				"(`id`, `cust_id`, `item_code`, `date_due`) VALUES ('"+
 				c.getId()+"', '"+c.getCustomerId()+"', '"+
 				c.getItem().getCode()+"', '"+c.getDueDate()+"');";
-		String result = query(query);
+		result = query(query);
 		
-		if (result.equals(""))
+		if (result.equals("")){
+			c.getItem().setAvail(c.getItem().getAvail()-1);
+			putInventoryItem(c.getItem());
 			return true;// successful update query returns exactly nothing.
+		}	
 		return false;
 	}
 	
 	public boolean returnCheckout(int id){
 
-		// determine if the checkout exists.
-		String query = "SELECT * FROM `checkouts` WHERE id = '"+id+"'";
-		String result = query(query);
+		Checkout co = getCheckout(id);
 						
-		if(result.equals("")){
+		if(co==null){
 			System.out.println("Checkout does not exist...");
 			return false;
 		}
 				
-		query = "DELETE FROM `arlenb_coms362db`.`checkouts` WHERE `checkouts`.`id` = '"+id+"'";
-		result = query(query);
+		String query = "DELETE FROM `arlenb_coms362db`.`checkouts` WHERE `checkouts`.`id` = '"+id+"'";
+		String result = query(query);
 				
-		if(result.equals(""))return true;
+		if(result.equals("")){
+			co.getItem().setAvail(co.getItem().getAvail()+1);
+			putInventoryItem(co.getItem());
+			return true;
+		}
 		
 		return false;
 	}
@@ -429,7 +436,7 @@ public class DatabaseSupport {
 		//TODO add genre to database and 
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		
-		String query = "SELECT * FROM `items` WHERE genre = '"+genre+"'";
+		String query = "SELECT * FROM `items` WHERE genre LIKE '%"+genre+"%'";
 
 		String result = query(query);
 		

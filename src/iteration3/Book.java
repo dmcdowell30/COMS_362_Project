@@ -1,17 +1,16 @@
-package iteration1;
+package iteration3;
 
-public class Movie implements Item{
-
+public class Book implements Item{
 	private String code;
 	private String name;
-	private int type = Item.MOVIE;
-	private String typeString = "Movie";
+	private int type = Item.BOOK;
+	private String typeString = "Book";
 	private int quantity;
 	private int fine;
 	private int avail;
 	private String genre;
 	
-	public Movie(String name, String genre, String code, int quantity, int avail){
+	public Book(String name, String genre, String code, int quantity, int avail){
 		this.code = code;
 		this.name = name;
 		this.genre = genre;
@@ -68,8 +67,12 @@ public class Movie implements Item{
 		return avail;
 	}
 	@Override
+	public void setAvail(int nowAvail) {
+		avail= nowAvail;
+	}
+	@Override
 	public void modifyFine(int fine) {
-		this.fine += fine;
+		this.fine += fine;	
 	}
 	public int getFine() {
 		return fine;
@@ -84,5 +87,4 @@ public class Movie implements Item{
 	public void setGenre(String genre){
 		this.genre = genre;
 	}
-
 }

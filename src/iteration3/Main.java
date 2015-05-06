@@ -1,4 +1,4 @@
-package iteration1;
+package iteration3;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -311,11 +311,14 @@ public class Main {
 			{
 				ArrayList<Checkout> checkouts = libctrl.viewCheckOutItems();
 				if(checkouts == null){
-					System.out.println("Operation Failed.");
+					System.out.println("Operation Failed. No checkouts.");
 				}
-				for(Checkout co:checkouts){
-					Item it = co.getItem();
-					System.out.println("Checkout id: "+co.getId()+"\t Customer id: "+co.getCustomerId()+"\t Due: "+co.getDueDate()+"\t "+it.getTypeString()+": "+it.getName());
+				else{
+					for(Checkout co:checkouts){
+						Item it = co.getItem();
+						if(it==null)continue;
+						System.out.println("Checkout id: "+co.getId()+"\t Customer id: "+co.getCustomerId()+"\t Due: "+co.getDueDate()+"\t "+it.getTypeString()+": "+it.getName());
+					}
 				}
 			}
 			//Increase item quantity

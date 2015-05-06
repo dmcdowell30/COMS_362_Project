@@ -1,4 +1,4 @@
-package iteration1;
+package iteration3;
 
 import java.util.ArrayList;
 
@@ -70,7 +70,10 @@ public class Library {
 	
 	public boolean checkOutMovie(int id, String code) 
 	{
-		Movie mov = (Movie) MyDatabaseSupport.getItem(code);
+		Movie mov = null;
+		try{mov = (Movie) MyDatabaseSupport.getItem(code);}
+		catch(ClassCastException e){e.printStackTrace();
+		return false;}
 		
 		if(mov == null)
 		{
@@ -89,7 +92,10 @@ public class Library {
 	
 	public boolean checkOutBook(int id, String code) 
 	{
-		Book book = (Book) MyDatabaseSupport.getItem(code);
+		Book book = null;
+		try{book = (Book) MyDatabaseSupport.getItem(code);}
+		catch(ClassCastException e){e.printStackTrace();
+		return false;}
 		
 		if(book == null)
 		{
@@ -108,8 +114,10 @@ public class Library {
 	
 	public boolean checkOutMusic(int id, String code) 
 	{
-		Music mus = (Music) MyDatabaseSupport.getItem(code);
-		
+		Music mus=null;
+		try{mus = (Music) MyDatabaseSupport.getItem(code);}
+		catch(ClassCastException e){e.printStackTrace();
+		return false;}
 		if(mus == null)
 		{
 			return false;
